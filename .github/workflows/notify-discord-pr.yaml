@@ -1,0 +1,22 @@
+name: Enviar msg no discord ao abrir PR
+
+on:
+  pull_request:
+    types: [opened]
+
+jobs:
+  notify:
+    name: Enviar mensagem
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send message
+        uses: Ilshidur/action-discord@master
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.PR_CHANNEL_DISCORD_WEBHOOK }}
+        with:
+          args: |
+            ## :compression: Novo PR Aberto!
+            <@513797646058782720> <@329388486920765442>
+            > ✦ **Título:** ${{ github.event.pull_request.title }}
+            > ✦ **Link:** ${{ github.event.pull_request.html_url }}
+            > ✦ **Autor:** **${{ github.event.pull_request.user.login }}**
