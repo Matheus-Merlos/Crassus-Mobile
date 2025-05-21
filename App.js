@@ -1,17 +1,15 @@
-import { StyleSheet } from 'react-native';
-import WelcomeScreen from './src/screens/welcomeScreen';
+import { StyleSheet } from "react-native";
+import WelcomeScreen from "./src/screens/welcomeScreen";
 
 export default function App() {
-  return (
-    <WelcomeScreen />
-  );
+  return <WelcomeScreen />;
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
