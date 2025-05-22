@@ -3,7 +3,7 @@
     "editor.codeActionsOnSave": {
         "source.fixAll.eslint": "always",
         "source.fixAll.ts": "always",
-        "source.removeUnusedImports": "never"
+        "source.removeUnusedImports": "always"
     },
     "editor.tabSize": 2
 }
