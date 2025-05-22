@@ -1,5 +1,4 @@
-import { StyleSheet } from "react-native";
-import WelcomeScreen from "./src/screens/welcome";
+import { StyleSheet, Dimensions, View } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import * as colors from "./src/constants/colors";
 
@@ -8,35 +7,28 @@ import { useFonts } from "expo-font";
 import poppinsRegular from "./assets/fonts/Poppins-Regular.ttf";
 import publicSansBold from "./assets/fonts/PublicSans-Bold.ttf";
 import interBold from "./assets/fonts/Inter-Bold.ttf";
+import interLight from "./assets/fonts/Inter-Light.ttf";
 
 //Imports exclusivos para navigation
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { createStaticNavigation } from "@react-navigation/native";
 
 //Imports do react redux
 import { Provider } from "react-redux";
 import { loginPersistor, loginStore } from "./src/redux/stores";
 import { PersistGate } from "redux-persist/integration/react";
 
+import LoginScreen from "./src/screens/login/login";
+
 export default function App() {
   const [fontsLoaded] = useFonts({
     "Poppins-Regular": poppinsRegular,
     "PublicSans-Bold": publicSansBold,
     "Inter-Bold": interBold,
+    "Inter-Light": interLight,
   });
 
   if (!fontsLoaded) {
     return null;
   }
-
-  const RootStack = createNativeStackNavigator({
-    initialRouteName: "Welcome",
-    screens: {
-      Welcome: WelcomeScreen,
-    },
-  });
-
-  const Navigation = createStaticNavigation(RootStack);
 
   return (
     <Provider store={loginStore}>
@@ -46,17 +38,27 @@ export default function App() {
           style={styles.background}
           start={{ x: 1, y: 0 }}
           end={{ x: 0, y: 0 }}
-        >
-          <WelcomeScreen />
-        </LinearGradient>
+        />
+        <View style={styles.mainView}>
+          <LoginScreen />
+        </View>
       </PersistGate>
     </Provider>
   );
 }
 
+const { width, height } = Dimensions.get("window");
+
 const styles = StyleSheet.create({
+  mainView: {
+    width,
+    height,
+    alignItems: "center",
+  },
   background: {
-    flex: 1,
+    position: "absolute",
+    width,
+    height,
     alignItems: "center",
     justifyContent: "center",
   },
