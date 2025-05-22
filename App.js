@@ -3,10 +3,14 @@ import WelcomeScreen from "./src/screens/welcomeScreen";
 import { LinearGradient } from "expo-linear-gradient";
 import * as colors from "./src/constants/colors";
 
+//Imports exclusivos de fontes
 import { useFonts } from "expo-font";
 import poppinsRegular from "./assets/fonts/Poppins-Regular.ttf";
 import publicSansBold from "./assets/fonts/PublicSans-Bold.ttf";
 import interBold from "./assets/fonts/Inter-Bold.ttf";
+
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { createStaticNavigation } from "@react-navigation/native";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -18,6 +22,15 @@ export default function App() {
   if (!fontsLoaded) {
     return null;
   }
+
+  const RootStack = createNativeStackNavigator({
+    initialRouteName: "Welcome",
+    screens: {
+      Welcome: WelcomeScreen,
+    },
+  });
+
+  const Navigation = createStaticNavigation(RootStack);
 
   return (
     <LinearGradient
