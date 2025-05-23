@@ -2,6 +2,7 @@ import { Dimensions, StyleSheet, View, Text } from "react-native";
 import * as colors from "../../constants/colors";
 import FloatingLabelInput from "../../components/floatingLabelInput";
 import { useState } from "react";
+import CrassusButton from "../../components/crassusButton";
 
 export default function LoginScreen() {
   const [email, setEmail] = useState();
@@ -25,6 +26,16 @@ export default function LoginScreen() {
           isPassword={true}
           style={{ marginTop: 30 }}
         />
+        <Text style={styles.forgotPassword}>Esqueceu sua senha?</Text>
+        <CrassusButton
+          text="Fazer Login"
+          color={colors.BACKGROUND_YELLOW}
+          style={{ marginTop: 150 }}
+        />
+        <View style={styles.texts}>
+          <Text style={styles.dontHave}>Não tem uma conta?</Text>
+          <Text style={styles.register}>Cadastre-se</Text>
+        </View>
       </View>
     </>
   );
@@ -52,5 +63,26 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 50,
     paddingTop: 75,
     alignItems: "center",
+  },
+  forgotPassword: {
+    fontFamily: "Inter-Bold",
+    color: colors.BACKGROUND_YELLOW,
+    fontSize: 20,
+    marginLeft: 125,
+  },
+  texts: {
+    marginLeft: 175,
+    marginTop: 75,
+  },
+  dontHave: {
+    fontFamily: "Inter-Light",
+    fontSize: 18,
+    color: colors.BACKGROUND_RED,
+  },
+  register: {
+    fontFamily: "Inter-Bold",
+    fontSize: 18,
+    color: colors.BACKGROUND_YELLOW,
+    marginLeft: 60,
   },
 });
