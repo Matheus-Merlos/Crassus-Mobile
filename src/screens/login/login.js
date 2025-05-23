@@ -3,10 +3,18 @@ import * as colors from "../../constants/colors";
 import FloatingLabelInput from "../../components/floatingLabelInput";
 import { useState } from "react";
 import CrassusButton from "../../components/crassusButton";
+import * as actions from "../../redux/actions";
+import { useDispatch } from "react-redux";
 
 export default function LoginScreen() {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
+
+  const dispatch = useDispatch();
+
+  function handleSubmit() {
+    //dispatch(actions.login(email, password));
+  }
 
   return (
     <>
@@ -31,6 +39,7 @@ export default function LoginScreen() {
           text="Fazer Login"
           color={colors.BACKGROUND_YELLOW}
           style={{ marginTop: 150 }}
+          onPress={handleSubmit}
         />
         <View style={styles.texts}>
           <Text style={styles.dontHave}>Não tem uma conta?</Text>

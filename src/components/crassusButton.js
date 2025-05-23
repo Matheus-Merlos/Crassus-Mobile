@@ -1,7 +1,12 @@
 import { TouchableOpacity, Text } from "react-native";
 import * as colors from "../constants/colors";
 
-export default function CrassusButton({ text, color, style }) {
+export default function CrassusButton({
+  text,
+  color,
+  style,
+  onPress = () => {},
+}) {
   return (
     <TouchableOpacity
       style={[
@@ -14,6 +19,7 @@ export default function CrassusButton({ text, color, style }) {
         },
         style,
       ]}
+      onPress={onPress}
     >
       <Text
         style={{

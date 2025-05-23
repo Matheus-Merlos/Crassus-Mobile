@@ -27,9 +27,7 @@ export default function App() {
     "Inter-Light": interLight,
   });
 
-  if (!fontsLoaded) {
-    return null;
-  }
+  if (!fontsLoaded) return null;
 
   return (
     <Provider store={loginStore}>
