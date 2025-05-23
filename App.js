@@ -16,6 +16,7 @@ import { Provider } from "react-redux";
 import { loginPersistor, loginStore } from "./src/redux/stores";
 import { PersistGate } from "redux-persist/integration/react";
 
+import WelcomeScreen from "./src/screens/welcome";
 import LoginScreen from "./src/screens/login/login";
 
 export default function App() {
@@ -59,7 +60,5 @@ const styles = StyleSheet.create({
     position: "absolute",
     width,
     height,
-    alignItems: "center",
-    justifyContent: "center",
   },
 });
