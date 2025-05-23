@@ -18,6 +18,7 @@ import { PersistGate } from "redux-persist/integration/react";
 
 import WelcomeScreen from "./src/screens/welcome";
 import LoginScreen from "./src/screens/login/login";
+import RegisterScreen from "./src/screens/login/register";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -39,7 +40,7 @@ export default function App() {
           end={{ x: 0, y: 0 }}
         />
         <View style={styles.mainView}>
-          <LoginScreen />
+          <RegisterScreen />
         </View>
       </PersistGate>
     </Provider>
