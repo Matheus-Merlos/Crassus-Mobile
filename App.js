@@ -9,6 +9,7 @@ import publicSansBold from "./assets/fonts/PublicSans-Bold.ttf";
 import interBold from "./assets/fonts/Inter-Bold.ttf";
 import interLight from "./assets/fonts/Inter-Light.ttf";
 import poppinsSemiBold from "./assets/fonts/Poppins-SemiBold.ttf";
+import poppinsBlackItalic from "./assets/fonts/Poppins-BlackItalic.ttf";
 
 //Imports do react redux
 import { useSelector } from "react-redux";
@@ -52,6 +53,7 @@ export default function App() {
     "Poppins-Regular": poppinsRegular,
     "Poppins-SemiBold": poppinsSemiBold,
     "PublicSans-Bold": publicSansBold,
+    "Poppins-BlackItalic": poppinsBlackItalic,
     "Inter-Bold": interBold,
     "Inter-Light": interLight,
   });

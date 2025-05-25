@@ -41,7 +41,7 @@ const BottomTabNavigator = () => {
         tabBarLabelStyle: {
           fontWeight: "bold",
           fontSize: 12,
-          marginTop: 6, // empurra o texto para baixo
+          marginTop: 6,
         },
         tabBarActiveTintColor: "red",
         tabBarInactiveTintColor: "red",

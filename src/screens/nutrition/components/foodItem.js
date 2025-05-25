@@ -1,7 +1,13 @@
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import {
+  Dimensions,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import Svg, { Path } from "react-native-svg";
-import EditIcon from "../../../../assets/icons/editIcon";
 import * as colors from "../../../constants/colors";
+import TrashIcon from "../../../../assets/icons/trashIcon";
 
 const ICON_MAP = {
   CAFE: (
@@ -29,50 +35,62 @@ const ICON_MAP = {
     </Svg>
   ),
 };
-
-export default function MealItem({ name, calories, iconIndex }) {
+const FoodItem = ({ name, amount, onDelete }) => {
   return (
     <View style={styles.container}>
-      <View style={styles.icon}>{ICON_MAP[iconIndex]}</View>
-
-      <View style={styles.textContainer}>
-        <Text style={styles.name}>{name}</Text>
-        <Text style={styles.calories}>{calories} calories</Text>
+      <View style={styles.infoContainer}>
+        {ICON_MAP.ALMOCO}
+        <View style={styles.textContainer}>
+          <Text style={styles.name}>{name}</Text>
+          <Text style={styles.amount}>{amount}</Text>
+        </View>
       </View>
-      <TouchableOpacity>
-        <EditIcon color={colors.BACKGROUND_RED}></EditIcon>
+      <TouchableOpacity onPress={onDelete} style={styles.deleteButton}>
+        <TrashIcon />
       </TouchableOpacity>
     </View>
   );
-}
+};
+
+export default FoodItem;
+
+const { width } = Dimensions.get("window");
 
 const styles = StyleSheet.create({
   container: {
-    // fontSize: 40,
+    width: width * 0.9,
+    backgroundColor: colors.WHITE_ISH,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingLeft: 24,
+    paddingRight: 24,
+    padding: 12,
+    borderRadius: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: "#E25C6B",
+    marginHorizontal: 16, // Esta margem já está criando o espaçamento lateral
+  },
+  infoContainer: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: colors.WHITE_ISH,
-    padding: 10,
-    borderRadius: 8,
-    justifyContent: "space-between",
-  },
-  icon: {
-    width: 12,
-    height: 12,
-    marginRight: 10,
+    flexShrink: 1,
+    padding: 5,
   },
   textContainer: {
-    // fontSize: 100,
-    marginLeft: 10,
-    flex: 1,
+    marginLeft: 15,
   },
   name: {
-    fontSize: 25,
-    fontWeight: "600", // semibold
-    color: "#1C1C1E",
+    fontFamily: "Inter-Bold",
+    fontSize: 14,
+    color: "#000",
   },
-  calories: {
-    fontSize: 16,
-    color: "#6B7280", // cinza claro
+  amount: {
+    fontSize: 12,
+    color: "#6B6B6B",
+  },
+  deleteButton: {
+    backgroundColor: "#E25C6B",
+    borderRadius: 999,
   },
 });

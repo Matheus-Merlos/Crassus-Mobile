@@ -5,3 +5,4 @@ export const PERFORMANCE = "Performance";
 export const MORE = "More";
 export const NUTRITION = "Nutrition";
 export const RUN = "Run";
+export const MEAL = "Meal";
