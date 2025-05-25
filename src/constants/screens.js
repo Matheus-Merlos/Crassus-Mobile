@@ -3,3 +3,4 @@ export const LOGIN = "Login";
 export const REGISTER = "Register";
 export const PERFORMANCE = "Performance";
 export const NUTRITION = "Nutrition";
+export const MORE = "More";

@@ -71,7 +71,9 @@ export default function App() {
         <NavigationContainer>
           <Stack.Navigator
             screenOptions={{ headerShown: false }}
-            initialRouteName={isLoggedIn ? screens.NUTRITION : screens.WELCOME}
+            initialRouteName={
+              isLoggedIn ? screens.PERFORMANCE : screens.WELCOME
+            }
           >
             {isLoggedIn ? (
               <>
@@ -80,8 +82,12 @@ export default function App() {
                   children={() => addGradient(<NutritionScreen />)}
                 />
                 <Stack.Screen
-                  name={screens.PERFORMANCE}
+                  name={screens.MORE}
                   children={() => addGradient(<MoreScreen />)}
+                />
+                <Stack.Screen
+                  name={screens.PERFORMANCE}
+                  children={() => addGradient(<PerformanceScreen />)}
                 />
               </>
             ) : (
