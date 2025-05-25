@@ -17,9 +17,9 @@ export default function LoginScreen() {
   const dispatch = useDispatch();
 
   function handleSubmit() {
+    navigation.navigate(screens.NUTRITION);
     //dispatch(actions.login(email, password));
   }
-
   const navigation = useNavigation();
 
   return (
