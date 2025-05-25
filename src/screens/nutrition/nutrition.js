@@ -1,10 +1,10 @@
 import { useNavigation } from "@react-navigation/native";
 import { Text, ScrollView, StyleSheet, Dimensions, View } from "react-native";
 import * as colors from "../../constants/colors";
-import MealDay from "./mealDayComponent";
+import MealDay from "./components/mealDay";
 import CrassusButton from "../../components/crassusButton";
 
-export default function MealsScreen() {
+export default function NutritionScreen() {
   const navigation = useNavigation();
   const mockMeals = [
     {

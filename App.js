@@ -23,6 +23,7 @@ import { NavigationContainer } from "@react-navigation/native";
 
 import * as screens from "./src/constants/screens";
 import MoreScreen from "./src/screens/config/moreScreen";
+import NutritionScreen from "./src/screens/nutrition/nutrition";
 
 const { width, height } = Dimensions.get("window");
 
@@ -70,12 +71,14 @@ export default function App() {
         <NavigationContainer>
           <Stack.Navigator
             screenOptions={{ headerShown: false }}
-            initialRouteName={
-              isLoggedIn ? screens.PERFORMANCE : screens.WELCOME
-            }
+            initialRouteName={isLoggedIn ? screens.NUTRITION : screens.WELCOME}
           >
             {isLoggedIn ? (
               <>
+                <Stack.Screen
+                  name={screens.NUTRITION}
+                  children={() => addGradient(<NutritionScreen />)}
+                />
                 <Stack.Screen
                   name={screens.PERFORMANCE}
                   children={() => addGradient(<MoreScreen />)}
