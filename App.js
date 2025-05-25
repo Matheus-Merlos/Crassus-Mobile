@@ -22,6 +22,8 @@ import { NavigationContainer } from "@react-navigation/native";
 
 import * as screens from "./src/constants/screens";
 import BottomTabNavigator from "./src/navigation/BottomTabNavigator";
+import MoreScreen from "./src/screens/config/moreScreen";
+import NutritionScreen from "./src/screens/nutrition/nutrition";
 
 const { width, height } = Dimensions.get("window");
 
