@@ -10,6 +10,8 @@ import * as colors from "../../constants/colors";
 import FloatingLabelInput from "../../components/floatingLabelInput";
 import { useRef, useState } from "react";
 import CrassusButton from "../../components/crassusButton";
+import BackButton from "../../components/backButton";
+import { Dropdown } from "react-native-element-dropdown";
 
 export default function RegisterScreen() {
   const [page, setPage] = useState(0);
@@ -23,7 +25,12 @@ export default function RegisterScreen() {
   const [birthdate, setBirthDate] = useState("");
   const [height, setHeight] = useState("");
   const [weight, setWeight] = useState("");
-  const [gender, setGender] = useState("");
+  const [gender, setGender] = useState(null);
+
+  const genders = [
+    { label: "Masculino", value: "M" },
+    { label: "Feminino", value: "F" },
+  ];
 
   function animateToPage(pageNumber) {
     setPage(pageNumber);
@@ -35,9 +42,50 @@ export default function RegisterScreen() {
     }).start();
   }
 
+  //Função pra deixar a data certinho no formato DD/MM/AAAA
+  function handleBirthdateChange(text) {
+    let cleanedText = text.replace(/\D/g, "");
+
+    if (cleanedText.length > 2 && cleanedText.length <= 4) {
+      cleanedText = `${cleanedText.slice(0, 2)}/${cleanedText.slice(2)}`;
+    } else if (cleanedText.length > 4) {
+      cleanedText = `${cleanedText.slice(0, 2)}/${cleanedText.slice(2, 4)}/${cleanedText.slice(4, 8)}`;
+    }
+
+    setBirthDate(cleanedText);
+  }
+
+  function handleSubmit() {
+    if (password !== confirmPassword) {
+      //lógica aqui (WIP)
+    }
+
+    const [day, month, year] = birthdate.split("/");
+    const birthdateISO8601 = `${year}-${month}-${day}`;
+
+    const JSONBody = {
+      name,
+      email,
+      birthdate: birthdateISO8601,
+      gender,
+      height,
+      weight,
+      password,
+    };
+
+    console.log(JSONBody);
+  }
+
   return (
     <>
       <Text style={styles.title}>Criar sua Conta</Text>
+      {page === 1 && (
+        <BackButton
+          color={colors.WHITE}
+          style={styles.backButton}
+          action={() => animateToPage(0)}
+        />
+      )}
       <View style={styles.background}>
         <Animated.View
           style={[styles.slider, { transform: [{ translateX: slideAnim }] }]}
@@ -84,34 +132,44 @@ export default function RegisterScreen() {
               label="Data de Nascimento"
               color={colors.BACKGROUND_RED}
               value={birthdate}
-              setValueFunction={setBirthDate}
+              setValueFunction={handleBirthdateChange}
             />
             <FloatingLabelInput
-              label="Altura"
+              label="Altura (em M)"
               color={colors.BACKGROUND_RED}
               value={height}
               setValueFunction={setHeight}
               style={{ marginTop: 30 }}
             />
             <FloatingLabelInput
-              label="Peso"
+              label="Peso (em Kg)"
               color={colors.BACKGROUND_RED}
               value={weight}
               setValueFunction={setWeight}
               style={{ marginTop: 30 }}
             />
-            <FloatingLabelInput
-              label="Gênero"
-              color={colors.BACKGROUND_RED}
-              value={gender}
-              setValueFunction={setGender}
-              style={{ marginTop: 30 }}
-            />
+            <View style={styles.genderSelector}>
+              <Text style={styles.genderLabel}>Gênero</Text>
+              <Dropdown
+                style={styles.dropdown}
+                selectedTextStyle={styles.selectedTextStyle}
+                placeholderStyle={styles.genderPlaceholderStyle}
+                data={genders}
+                maxHeight={200}
+                labelField="label"
+                valueField="value"
+                placeholder="Selecione o gênero..."
+                value={gender}
+                onChange={(item) => {
+                  setGender(item.value);
+                }}
+              />
+            </View>
             <CrassusButton
-              text="Continuar"
+              text="Cadastrar-se"
               color={colors.BACKGROUND_YELLOW}
-              style={{ marginTop: 15 }}
-              onPress={() => animateToPage(0)}
+              style={{ marginTop: 50 }}
+              onPress={handleSubmit}
             />
           </View>
         </Animated.View>
@@ -134,6 +192,10 @@ const styles = StyleSheet.create({
     fontSize: 40,
     left: 30,
     top: 120,
+  },
+  backButton: {
+    top: 57,
+    left: 15,
   },
   background: {
     marginTop: 150,
@@ -171,5 +233,30 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: colors.BACKGROUND_YELLOW,
     marginLeft: 55,
+  },
+  genderSelector: {
+    marginTop: 10,
+    width: 350,
+    padding: 3,
+  },
+  genderLabel: {
+    fontFamily: "Inter-Bold",
+    fontSize: 16,
+    color: colors.BACKGROUND_RED,
+    top: -2.5,
+  },
+  dropdown: {
+    borderBottomWidth: 0.75,
+    borderBottomColor: colors.BACKGROUND_RED,
+  },
+  selectedTextStyle: {
+    border: "none",
+    fontFamily: "Inter-Light",
+    fontSize: 20,
+  },
+  genderPlaceholderStyle: {
+    fontFamily: "Inter-Light",
+    fontSize: 20,
+    opacity: 0.5,
   },
 });
