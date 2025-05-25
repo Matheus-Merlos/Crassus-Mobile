@@ -9,6 +9,7 @@ import poppinsRegular from "./assets/fonts/Poppins-Regular.ttf";
 import publicSansBold from "./assets/fonts/PublicSans-Bold.ttf";
 import interBold from "./assets/fonts/Inter-Bold.ttf";
 import interLight from "./assets/fonts/Inter-Light.ttf";
+import poppinsSemiBold from "./assets/fonts/Poppins-SemiBold.ttf";
 
 //Imports do react redux
 import { useSelector } from "react-redux";
@@ -21,6 +22,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NavigationContainer } from "@react-navigation/native";
 
 import * as screens from "./src/constants/screens";
+import MoreScreen from "./src/screens/config/moreScreen";
 
 const { width, height } = Dimensions.get("window");
 
@@ -45,9 +47,10 @@ function addGradient(component) {
 const Stack = createNativeStackNavigator();
 
 export default function App() {
-  const isLoggedIn = useSelector((state) => state.isLoggedIn);
+  const isLoggedIn = true;
   const [fontsLoaded] = useFonts({
     "Poppins-Regular": poppinsRegular,
+    "Poppins-SemiBold": poppinsSemiBold,
     "PublicSans-Bold": publicSansBold,
     "Inter-Bold": interBold,
     "Inter-Light": interLight,
@@ -75,7 +78,7 @@ export default function App() {
               <>
                 <Stack.Screen
                   name={screens.PERFORMANCE}
-                  children={() => addGradient(<PerformanceScreen />)}
+                  children={() => addGradient(<MoreScreen />)}
                 />
               </>
             ) : (
