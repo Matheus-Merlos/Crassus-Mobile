@@ -14,6 +14,7 @@ import BackButton from "../../components/backButton";
 import { Dropdown } from "react-native-element-dropdown";
 import { useNavigation } from "@react-navigation/native";
 import * as screens from "../../constants/screens";
+import WhiteIshBackground from "../../components/whiteIshBackground";
 
 export default function RegisterScreen() {
   const [page, setPage] = useState(0);
@@ -82,7 +83,6 @@ export default function RegisterScreen() {
 
   return (
     <>
-      <Text style={styles.title}>Criar sua Conta</Text>
       {page === 0 && (
         <BackButton
           color={colors.WHITE}
@@ -97,7 +97,7 @@ export default function RegisterScreen() {
           action={() => animateToPage(0)}
         />
       )}
-      <View style={styles.background}>
+      <WhiteIshBackground title="Criar sua Conta">
         <Animated.View
           style={[styles.slider, { transform: [{ translateX: slideAnim }] }]}
         >
@@ -193,38 +193,17 @@ export default function RegisterScreen() {
             Fazer Login
           </Text>
         </View>
-      </View>
+      </WhiteIshBackground>
     </>
   );
 }
 
-const { width, height } = Dimensions.get("window");
+const { width } = Dimensions.get("window");
 
 const styles = StyleSheet.create({
-  title: {
-    position: "absolute",
-    fontFamily: "PublicSans-Bold",
-    color: colors.WHITE,
-    fontSize: 40,
-    left: 30,
-    top: 120,
-  },
   backButton: {
     top: 57,
     left: 15,
-  },
-  background: {
-    marginTop: 150,
-    position: "absolute",
-    width,
-    height: height * 0.7,
-    backgroundColor: colors.WHITE_ISH,
-    bottom: 0,
-    borderTopLeftRadius: 50,
-    borderTopRightRadius: 50,
-    paddingTop: 75,
-    alignItems: "center",
-    overflow: "hidden",
   },
   slider: {
     flexDirection: "row",
