@@ -3,6 +3,7 @@ import { Text, ScrollView, StyleSheet, Dimensions, View } from "react-native";
 import * as colors from "../../constants/colors";
 import MealDay from "./components/mealDay";
 import CrassusButton from "../../components/crassusButton";
+import WhiteIshBackground from "../../components/whiteIshBackground";
 
 export default function NutritionScreen() {
   const navigation = useNavigation();
@@ -47,12 +48,17 @@ export default function NutritionScreen() {
 
   return (
     <>
-      <Text style={styles.title}>Suas Refeições</Text>
-      <ScrollView contentContainerStyle={styles.background}>
+      <WhiteIshBackground
+        title="Suas Refeições"
+        titleDistanceToTop={75}
+        screenPercentage={83}
+        paddingTop={25}
+        isScroll
+      >
         {mockMeals.map((day, index) => (
           <MealDay key={index} date={day.date} meals={day.meals} />
         ))}
-      </ScrollView>
+      </WhiteIshBackground>
       <View style={styles.button}>
         <CrassusButton
           text="Nova refeição"
@@ -65,32 +71,11 @@ export default function NutritionScreen() {
   );
 }
 
-const { width, height } = Dimensions.get("window");
+const { width } = Dimensions.get("window");
 
 const styles = StyleSheet.create({
-  title: {
-    position: "absolute",
-    fontFamily: "PublicSans-Bold",
-    color: colors.WHITE,
-    fontSize: 40,
-    left: 30,
-    top: 80,
-  },
-  background: {
-    marginTop: 150,
-    position: "absolute",
-    width,
-    height: height * 0.8,
-    top: 20,
-    backgroundColor: colors.WHITE_ISH,
-    borderTopLeftRadius: 50,
-    borderTopRightRadius: 50,
-    paddingTop: 25,
-    alignItems: "center",
-  },
   addButton: {
     position: "absolute",
-    bottom: 100,
     alignSelf: "center",
     backgroundColor: "#fbbc05",
     paddingVertical: 12,
@@ -98,8 +83,12 @@ const styles = StyleSheet.create({
     width: width * 0.6,
   },
   button: {
+    position: "absolute",
     height: 150,
+    width,
+    alignItems: "center",
     justifyContent: "center",
     backgroundColor: colors.WHITE_ISH,
+    bottom: 0,
   },
 });
