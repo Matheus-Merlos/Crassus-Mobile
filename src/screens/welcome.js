@@ -1,18 +1,27 @@
 import { Image, Text, View, StyleSheet, TouchableOpacity } from "react-native";
 import crassusIcon from "../../assets/icons/crassus-icon.png";
 import * as colors from "../constants/colors";
+import { useNavigation } from "@react-navigation/native";
+import * as screens from "../constants/screens";
 
 export default function WelcomeScreen() {
+  const navigation = useNavigation();
   return (
-    <View>
+    <View style={{ alignItems: "center" }}>
       <Image source={crassusIcon} style={styles.icon}></Image>
       <Text style={styles.title}>Crassus</Text>
       <Text style={styles.welcome}>Bem-vindo!</Text>
       <View style={styles.buttons}>
-        <TouchableOpacity style={buttonStyles.loginButton}>
+        <TouchableOpacity
+          style={buttonStyles.loginButton}
+          onPress={() => navigation.navigate(screens.LOGIN)}
+        >
           <Text style={buttonStyles.loginText}>Fazer Login</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={buttonStyles.registerButton}>
+        <TouchableOpacity
+          style={buttonStyles.registerButton}
+          onPress={() => navigation.navigate(screens.REGISTER)}
+        >
           <Text style={buttonStyles.registerText}>Cadastrar-se</Text>
         </TouchableOpacity>
       </View>

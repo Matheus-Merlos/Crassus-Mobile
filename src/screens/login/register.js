@@ -12,6 +12,8 @@ import { useRef, useState } from "react";
 import CrassusButton from "../../components/crassusButton";
 import BackButton from "../../components/backButton";
 import { Dropdown } from "react-native-element-dropdown";
+import { useNavigation } from "@react-navigation/native";
+import * as screens from "../../constants/screens";
 
 export default function RegisterScreen() {
   const [page, setPage] = useState(0);
@@ -76,9 +78,18 @@ export default function RegisterScreen() {
     console.log(JSONBody);
   }
 
+  const navigation = useNavigation();
+
   return (
     <>
       <Text style={styles.title}>Criar sua Conta</Text>
+      {page === 0 && (
+        <BackButton
+          color={colors.WHITE}
+          style={styles.backButton}
+          action={() => navigation.goBack()}
+        />
+      )}
       {page === 1 && (
         <BackButton
           color={colors.WHITE}
@@ -175,7 +186,12 @@ export default function RegisterScreen() {
         </Animated.View>
         <View style={styles.texts}>
           <Text style={styles.dontHave}>Já tem uma conta?</Text>
-          <Text style={styles.register}>Fazer Login</Text>
+          <Text
+            style={styles.register}
+            onPress={() => navigation.navigate(screens.LOGIN)}
+          >
+            Fazer Login
+          </Text>
         </View>
       </View>
     </>

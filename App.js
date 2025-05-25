@@ -1,3 +1,4 @@
+/* eslint-disable react/no-children-prop */
 import { StyleSheet, Dimensions, View } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import * as colors from "./src/constants/colors";
@@ -9,18 +10,42 @@ import publicSansBold from "./assets/fonts/PublicSans-Bold.ttf";
 import interBold from "./assets/fonts/Inter-Bold.ttf";
 import interLight from "./assets/fonts/Inter-Light.ttf";
 
-//Imports exclusivos para navigation
-
 //Imports do react redux
-import { Provider } from "react-redux";
-import { loginPersistor, loginStore } from "./src/redux/stores";
-import { PersistGate } from "redux-persist/integration/react";
+import { useSelector } from "react-redux";
 
 import WelcomeScreen from "./src/screens/welcome";
 import LoginScreen from "./src/screens/login/login";
 import RegisterScreen from "./src/screens/login/register";
+import PerformanceScreen from "./src/screens/performance";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { NavigationContainer } from "@react-navigation/native";
+
+import * as screens from "./src/constants/screens";
+
+const { width, height } = Dimensions.get("window");
+
+function addGradient(component) {
+  return (
+    <View style={{ flex: 1 }}>
+      <LinearGradient
+        colors={[colors.BACKGROUND_YELLOW, colors.BACKGROUND_RED]}
+        style={{
+          position: "absolute",
+          width,
+          height,
+        }}
+        start={{ x: 1, y: 0 }}
+        end={{ x: 0, y: 0 }}
+      />
+      {component}
+    </View>
+  );
+}
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
+  const isLoggedIn = useSelector((state) => state.isLoggedIn);
   const [fontsLoaded] = useFonts({
     "Poppins-Regular": poppinsRegular,
     "PublicSans-Bold": publicSansBold,
@@ -31,33 +56,54 @@ export default function App() {
   if (!fontsLoaded) return null;
 
   return (
-    <Provider store={loginStore}>
-      <PersistGate loading={null} persistor={loginPersistor}>
+    <>
+      <View style={styles.mainView}>
         <LinearGradient
           colors={[colors.BACKGROUND_YELLOW, colors.BACKGROUND_RED]}
           style={styles.background}
           start={{ x: 1, y: 0 }}
           end={{ x: 0, y: 0 }}
         />
-        <View style={styles.mainView}>
-          <RegisterScreen />
-        </View>
-      </PersistGate>
-    </Provider>
+        <NavigationContainer>
+          <Stack.Navigator
+            screenOptions={{ headerShown: false }}
+            initialRouteName={
+              isLoggedIn ? screens.PERFORMANCE : screens.WELCOME
+            }
+          >
+            {isLoggedIn ? (
+              <>
+                <Stack.Screen
+                  name={screens.PERFORMANCE}
+                  children={() => addGradient(<PerformanceScreen />)}
+                />
+              </>
+            ) : (
+              <>
+                <Stack.Screen
+                  name={screens.WELCOME}
+                  children={() => addGradient(<WelcomeScreen />)}
+                />
+                <Stack.Screen
+                  name={screens.LOGIN}
+                  children={() => addGradient(<LoginScreen />)}
+                />
+                <Stack.Screen
+                  name={screens.REGISTER}
+                  children={() => addGradient(<RegisterScreen />)}
+                />
+              </>
+            )}
+          </Stack.Navigator>
+        </NavigationContainer>
+      </View>
+    </>
   );
 }
 
-const { width, height } = Dimensions.get("window");
-
 const styles = StyleSheet.create({
   mainView: {
-    width,
-    height,
-    alignItems: "center",
-  },
-  background: {
-    position: "absolute",
-    width,
-    height,
+    flex: 1,
+    position: "relative",
   },
 });
