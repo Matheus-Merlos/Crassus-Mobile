@@ -5,6 +5,9 @@ import { useState } from "react";
 import CrassusButton from "../../components/crassusButton";
 import * as actions from "../../redux/actions";
 import { useDispatch } from "react-redux";
+import BackButton from "../../components/backButton";
+import { useNavigation } from "@react-navigation/native";
+import * as screens from "../../constants/screens";
 
 export default function LoginScreen() {
   const [email, setEmail] = useState();
@@ -16,8 +19,15 @@ export default function LoginScreen() {
     //dispatch(actions.login(email, password));
   }
 
+  const navigation = useNavigation();
+
   return (
     <>
+      <BackButton
+        color={colors.WHITE}
+        style={{ top: 57, left: 15 }}
+        action={() => navigation.goBack()}
+      />
       <Text style={styles.title}>Fazer Login</Text>
       <View style={styles.background}>
         <FloatingLabelInput
@@ -43,7 +53,12 @@ export default function LoginScreen() {
         />
         <View style={styles.texts}>
           <Text style={styles.dontHave}>Não tem uma conta?</Text>
-          <Text style={styles.register}>Cadastre-se</Text>
+          <Text
+            style={styles.register}
+            onPress={() => navigation.navigate(screens.REGISTER)}
+          >
+            Cadastre-se
+          </Text>
         </View>
       </View>
     </>
