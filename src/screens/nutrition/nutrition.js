@@ -51,7 +51,7 @@ export default function NutritionScreen() {
       <WhiteIshBackground
         title="Suas Refeições"
         titleDistanceToTop={75}
-        screenPercentage={83}
+        screenPercentage={75}
         paddingTop={25}
         isScroll
       >
