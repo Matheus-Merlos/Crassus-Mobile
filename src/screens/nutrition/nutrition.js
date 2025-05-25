@@ -42,7 +42,7 @@ export default function NutritionScreen() {
   ];
 
   const handleNewMeal = () => {
-    navigation.navigate("AddMeal");
+    //navigation.navigate("AddMeal");
   };
 
   return (

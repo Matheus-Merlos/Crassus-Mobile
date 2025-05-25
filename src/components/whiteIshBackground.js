@@ -1,10 +1,11 @@
-import { Dimensions, StyleSheet, Text, View } from "react-native";
+import { Dimensions, ScrollView, StyleSheet, Text, View } from "react-native";
 import * as colors from "../constants/colors";
 
 export default function WhiteIshBackground({
   title = "",
   screenPercentage = 70,
   titleDistanceToTop = 120,
+  isScroll = false,
   children,
 }) {
   const { width, height } = Dimensions.get("window");
@@ -34,7 +35,11 @@ export default function WhiteIshBackground({
   return (
     <>
       <Text style={styles.title}>{title}</Text>
-      <View style={styles.background}>{children}</View>
+      {isScroll ? (
+        <ScrollView style={styles.background}>{children}</ScrollView>
+      ) : (
+        <View style={styles.background}>{children}</View>
+      )}
     </>
   );
 }
