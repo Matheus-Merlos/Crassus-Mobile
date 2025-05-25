@@ -24,26 +24,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import * as screens from "./src/constants/screens";
 import MoreScreen from "./src/screens/config/moreScreen";
 import NutritionScreen from "./src/screens/nutrition/nutrition";
-
-const { width, height } = Dimensions.get("window");
-
-function addGradient(component) {
-  return (
-    <View style={{ flex: 1 }}>
-      <LinearGradient
-        colors={[colors.BACKGROUND_YELLOW, colors.BACKGROUND_RED]}
-        style={{
-          position: "absolute",
-          width,
-          height,
-        }}
-        start={{ x: 1, y: 0 }}
-        end={{ x: 0, y: 0 }}
-      />
-      {component}
-    </View>
-  );
-}
+import addGradient from "./src/utils/addGradient";
 
 const Stack = createNativeStackNavigator();
 
