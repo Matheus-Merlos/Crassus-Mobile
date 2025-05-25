@@ -47,7 +47,7 @@ export default function PerformanceScreen() {
     <WhiteIshBackground
       title="Hoje"
       titleDistanceToTop={75}
-      screenPercentage={83}
+      screenPercentage={75}
       paddingTop={30}
     >
       <View style={styles.resume}>
