@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, Dimensions } from "react-native";
-import MealItem from "./mealItemItem";
-import * as colors from "../../constants/colors";
+import MealItem from "./mealItem";
+import * as colors from "../../../constants/colors";
 
 export default function MealDay({ date, meals }) {
   return (
