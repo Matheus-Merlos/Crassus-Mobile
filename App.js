@@ -1,4 +1,3 @@
-/* eslint-disable react/no-children-prop */
 import { StyleSheet, Dimensions, View } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import * as colors from "./src/constants/colors";
@@ -22,7 +21,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NavigationContainer } from "@react-navigation/native";
 
 import * as screens from "./src/constants/screens";
-import MoreScreen from "./src/screens/config/moreScreen";
+import BottomTabNavigator from "./src/navigation/BottomTabNavigator";
 
 const { width, height } = Dimensions.get("window");
 
@@ -43,7 +42,6 @@ function addGradient(component) {
     </View>
   );
 }
-
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -61,27 +59,14 @@ export default function App() {
   return (
     <>
       <View style={styles.mainView}>
-        <LinearGradient
-          colors={[colors.BACKGROUND_YELLOW, colors.BACKGROUND_RED]}
-          style={styles.background}
-          start={{ x: 1, y: 0 }}
-          end={{ x: 0, y: 0 }}
-        />
         <NavigationContainer>
-          <Stack.Navigator
-            screenOptions={{ headerShown: false }}
-            initialRouteName={
-              isLoggedIn ? screens.PERFORMANCE : screens.WELCOME
-            }
-          >
-            {isLoggedIn ? (
-              <>
-                <Stack.Screen
-                  name={screens.PERFORMANCE}
-                  children={() => addGradient(<MoreScreen />)}
-                />
-              </>
-            ) : (
+          {isLoggedIn ? (
+            <BottomTabNavigator />
+          ) : (
+            <Stack.Navigator
+              screenOptions={{ headerShown: false }}
+              initialRouteName={screens.WELCOME}
+            >
               <>
                 <Stack.Screen
                   name={screens.WELCOME}
@@ -96,8 +81,8 @@ export default function App() {
                   children={() => addGradient(<RegisterScreen />)}
                 />
               </>
-            )}
-          </Stack.Navigator>
+            </Stack.Navigator>
+          )}
         </NavigationContainer>
       </View>
     </>
