@@ -6,6 +6,7 @@ export default function WhiteIshBackground({
   screenPercentage = 70,
   titleDistanceToTop = 120,
   isScroll = false,
+  paddingTop = 75,
   children,
 }) {
   const { width, height } = Dimensions.get("window");
@@ -27,7 +28,7 @@ export default function WhiteIshBackground({
       bottom: 0,
       borderTopLeftRadius: 50,
       borderTopRightRadius: 50,
-      paddingTop: 75,
+      paddingTop: paddingTop,
       alignItems: "center",
       overflow: "hidden",
     },
@@ -36,7 +37,9 @@ export default function WhiteIshBackground({
     <>
       <Text style={styles.title}>{title}</Text>
       {isScroll ? (
-        <ScrollView style={styles.background}>{children}</ScrollView>
+        <ScrollView contentContainerStyle={styles.background}>
+          {children}
+        </ScrollView>
       ) : (
         <View style={styles.background}>{children}</View>
       )}
