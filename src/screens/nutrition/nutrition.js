@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import { Text, ScrollView, StyleSheet, Dimensions, View } from "react-native";
+import { StyleSheet, Dimensions, View } from "react-native";
 import * as colors from "../../constants/colors";
 import MealDay from "./components/mealDay";
 import CrassusButton from "../../components/crassusButton";
