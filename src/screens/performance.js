@@ -10,6 +10,19 @@ export default function PerformanceScreen() {
     consumedCalories: 1541,
     missingCalories: 697,
     burntCalories: 561,
+
+    proteins: {
+      necessary: 103,
+      eaten: 35,
+    },
+    carbs: {
+      necessary: 258,
+      eaten: 206,
+    },
+    fats: {
+      necessary: 68,
+      eaten: 32,
+    },
   };
   return (
     <WhiteIshBackground
@@ -55,20 +68,20 @@ export default function PerformanceScreen() {
       <View style={styles.progressBars}>
         <ProgressBar
           label="Carboidratos"
-          current={206}
-          total={258}
+          current={mockData.carbs.eaten}
+          total={mockData.carbs.necessary}
           color={colors.BACKGROUND_YELLOW}
         />
         <ProgressBar
           label="Proteínas"
-          current={35}
-          total={103}
+          current={mockData.proteins.eaten}
+          total={mockData.proteins.necessary}
           color={colors.BACKGROUND_YELLOW}
         />
         <ProgressBar
           label="Gordura"
-          current={32}
-          total={68}
+          current={mockData.fats.eaten}
+          total={mockData.fats.necessary}
           color={colors.BACKGROUND_YELLOW}
         />
       </View>
