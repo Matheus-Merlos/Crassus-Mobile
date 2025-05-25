@@ -1,6 +1,8 @@
 import { StyleSheet, Text, View } from "react-native";
 import WhiteIshBackground from "../components/whiteIshBackground";
 import { AnimatedCircularProgress } from "react-native-circular-progress";
+import ProgressBar from "../components/progressBar";
+import * as colors from "../constants/colors";
 
 export default function PerformanceScreen() {
   const mockData = {
@@ -50,6 +52,26 @@ export default function PerformanceScreen() {
           <Text style={styles.resumeItemDescription}>Gastas</Text>
         </View>
       </View>
+      <View style={styles.progressBars}>
+        <ProgressBar
+          label="Carboidratos"
+          current={206}
+          total={258}
+          color={colors.BACKGROUND_YELLOW}
+        />
+        <ProgressBar
+          label="Proteínas"
+          current={35}
+          total={103}
+          color={colors.BACKGROUND_YELLOW}
+        />
+        <ProgressBar
+          label="Gordura"
+          current={32}
+          total={68}
+          color={colors.BACKGROUND_YELLOW}
+        />
+      </View>
     </WhiteIshBackground>
   );
 }
@@ -72,6 +94,8 @@ const styles = StyleSheet.create({
   resumeItemDescription: {
     fontFamily: "Poppins-Regular",
     textAlign: "center",
+    fontSize: 14,
+    opacity: 0.5,
   },
   kcalGraphNumber: {
     fontFamily: "Poppins-SemiBold",
@@ -81,5 +105,10 @@ const styles = StyleSheet.create({
     fontFamily: "Poppins-Regular",
     fontSize: 16,
     opacity: 0.5,
+  },
+  progressBars: {
+    marginTop: 25,
+    flexDirection: "row",
+    gap: 30,
   },
 });
