@@ -4,5 +4,6 @@
         "source.fixAll.eslint": "always",
         "source.fixAll.ts": "always",
     },
-    "editor.tabSize": 2
+    "editor.tabSize": 2,
+    "editor.maxTokenizationLineLength": 20000
 }
