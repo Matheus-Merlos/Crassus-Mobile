@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     width: 175,
-    justifyContent: "space-around",
+    gap: 20,
   },
   optionText: {
     fontFamily: "Poppins-SemiBold",
