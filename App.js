@@ -21,6 +21,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NavigationContainer } from "@react-navigation/native";
 
 import * as screens from "./src/constants/screens";
+import NutritionScreen from "./src/screens/nutrition/nutrition";
 
 const { width, height } = Dimensions.get("window");
 
@@ -45,7 +46,7 @@ function addGradient(component) {
 const Stack = createNativeStackNavigator();
 
 export default function App() {
-  const isLoggedIn = useSelector((state) => state.isLoggedIn);
+  const isLoggedIn = true;
   const [fontsLoaded] = useFonts({
     "Poppins-Regular": poppinsRegular,
     "PublicSans-Bold": publicSansBold,
@@ -67,12 +68,14 @@ export default function App() {
         <NavigationContainer>
           <Stack.Navigator
             screenOptions={{ headerShown: false }}
-            initialRouteName={
-              isLoggedIn ? screens.PERFORMANCE : screens.WELCOME
-            }
+            initialRouteName={isLoggedIn ? screens.NUTRITION : screens.WELCOME}
           >
             {isLoggedIn ? (
               <>
+                <Stack.Screen
+                  name={screens.NUTRITION}
+                  children={() => addGradient(<NutritionScreen />)}
+                />
                 <Stack.Screen
                   name={screens.PERFORMANCE}
                   children={() => addGradient(<PerformanceScreen />)}

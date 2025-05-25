@@ -11,7 +11,7 @@ export default function MealDay({ date, meals }) {
           key={index}
           name={meal.name}
           calories={meal.calories}
-          iconIndex={1}
+          iconIndex="ALMOCO"
         />
       ))}
     </View>
@@ -26,9 +26,10 @@ const styles = StyleSheet.create({
     backgroundColor: colors.WHITE_ISH,
     padding: 15,
     marginBottom: 20,
+    marginTop: 5,
   },
   mealDate: {
-    fontSize: 18,
+    fontSize: 30,
     fontWeight: "bold",
     color: colors.BACKGROUND_YELLOW,
     marginBottom: 10,
