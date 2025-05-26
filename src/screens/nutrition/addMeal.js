@@ -29,7 +29,7 @@ export default function AddMealScreen({
   onEdit,
 }) {
   return (
-    <WhiteIshBackground screenPercentage={90}>
+    <WhiteIshBackground screenPercentage={80}>
       <View style={styles.card}>
         <View style={styles.headerRow}>
           <Text style={styles.timestamp}>Hoje - {time}</Text>

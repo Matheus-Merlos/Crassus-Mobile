@@ -2,7 +2,6 @@ import { StyleSheet, Dimensions, View } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import * as colors from "./src/constants/colors";
 
-//Imports exclusivos de fontes
 import { useFonts } from "expo-font";
 import poppinsRegular from "./assets/fonts/Poppins-Regular.ttf";
 import publicSansBold from "./assets/fonts/PublicSans-Bold.ttf";
@@ -11,7 +10,6 @@ import interLight from "./assets/fonts/Inter-Light.ttf";
 import poppinsSemiBold from "./assets/fonts/Poppins-SemiBold.ttf";
 import poppinsBlackItalic from "./assets/fonts/Poppins-BlackItalic.ttf";
 
-//Imports do react redux
 import { useSelector } from "react-redux";
 
 import WelcomeScreen from "./src/screens/welcome";
