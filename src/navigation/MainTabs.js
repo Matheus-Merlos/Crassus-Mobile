@@ -18,7 +18,7 @@ import PerformanceStack from "./PerformanceStack";
 
 const Tab = createBottomTabNavigator();
 
-export default function BottomTabNavigator() {
+export default function MainTabs() {
   return (
     <Tab.Navigator
       screenOptions={{
@@ -57,7 +57,7 @@ export default function BottomTabNavigator() {
 
       {/* Corridas com stack interno */}
       <Tab.Screen
-        name={screens.Race}
+        name={screens.RACE}
         component={RaceStack}
         options={{
           tabBarIcon: ({ color, size }) => (

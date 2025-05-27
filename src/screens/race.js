@@ -1,14 +1,12 @@
 // src/screens/race.js — Tela "Suas Corridas" usando constantes de cor
+import { useNavigation } from "@react-navigation/native";
+import { StyleSheet, Dimensions, View, Text } from "react-native";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import * as colors from "../constants/colors";
 
-import React from 'react';
-import { useNavigation } from '@react-navigation/native';
-import { StyleSheet, Dimensions, View, Text } from 'react-native';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import * as colors from '../constants/colors';
-
-import CrassusButton from '../components/crassusButton';
-import WhiteIshBackground from '../components/whiteIshBackground';
-import RunIcon from '../../assets/icons/runIcon';
+import CrassusButton from "../components/crassusButton";
+import WhiteIshBackground from "../components/whiteIshBackground";
+import RunIcon from "../../assets/icons/runIcon";
 
 // ────────────────────────────────────────────────────────────────────────────────
 // Componentes auxiliares
@@ -26,10 +24,14 @@ const RunCard = ({ name, distance }) => (
     <View style={styles.cardTextArea}>
       <Text style={styles.cardTitle}>{name}</Text>
       <Text style={styles.cardSubtitle}>
-        {distance.toString().replace('.', ',')} km percorridos
+        {distance.toString().replace(".", ",")} km percorridos
       </Text>
     </View>
-    <MaterialCommunityIcons name="pin" size={28} color={colors.BACKGROUND_RED} />
+    <MaterialCommunityIcons
+      name="pin"
+      size={28}
+      color={colors.BACKGROUND_RED}
+    />
   </View>
 );
 
@@ -47,23 +49,23 @@ export default function RaceScreen() {
 
   const mockHistory = [
     {
-      month: 'Abril',
-      runs: [{ name: 'Corrida 97', distance: 5.41 }],
+      month: "Abril",
+      runs: [{ name: "Corrida 97", distance: 5.41 }],
     },
     {
-      month: 'Março',
+      month: "Março",
       runs: [
-        { name: 'Corrida 96', distance: 2.69 },
-        { name: 'Corrida 95', distance: 2.69 },
-        { name: 'Corrida 94', distance: 3.71 },
-        { name: 'Corrida 93', distance: 4.65 },
-        { name: 'Corrida 92', distance: 4.29 },
+        { name: "Corrida 96", distance: 2.69 },
+        { name: "Corrida 95", distance: 2.69 },
+        { name: "Corrida 94", distance: 3.71 },
+        { name: "Corrida 93", distance: 4.65 },
+        { name: "Corrida 92", distance: 4.29 },
       ],
     },
   ];
 
   const handleNewRun = () => {
-    navigation.navigate('RunProgress');
+    navigation.navigate("RunProgress");
   };
 
   return (
@@ -73,7 +75,6 @@ export default function RaceScreen() {
         titleDistanceToTop={75}
         screenPercentage={75}
         paddingTop={25}
-        isScroll
       >
         {mockHistory.map((g) => (
           <MonthSection key={g.month} month={g.month} runs={g.runs} />
@@ -96,7 +97,7 @@ export default function RaceScreen() {
 // Estilos
 // ────────────────────────────────────────────────────────────────────────────────
 
-const { width } = Dimensions.get('window');
+const { width } = Dimensions.get("window");
 
 const CARD_HEIGHT = 90;
 const CARD_WIDTH = width * 0.9;
@@ -106,7 +107,7 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   monthLabel: {
-    fontFamily: 'Poppins-SemiBold',
+    fontFamily: "Poppins-SemiBold",
     fontSize: 18,
     color: colors.BACKGROUND_RED,
     marginBottom: 10,
@@ -114,49 +115,49 @@ const styles = StyleSheet.create({
   cardContainer: {
     width: CARD_WIDTH,
     height: CARD_HEIGHT,
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     backgroundColor: colors.WHITE_ISH,
     borderRadius: 12,
     paddingHorizontal: 14,
     marginBottom: 12,
-    alignSelf: 'center',
+    alignSelf: "center",
   },
   iconFrame: {
     width: 60,
     height: 60,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     backgroundColor: colors.WHITE_ISH,
     borderRadius: 12,
     marginRight: 14,
   },
   cardTextArea: { flex: 1 },
   cardTitle: {
-    fontFamily: 'Poppins-SemiBold',
+    fontFamily: "Poppins-SemiBold",
     fontSize: 20,
-    color: 'rgba(0,0,0,0.9)',
+    color: "rgba(0,0,0,0.9)",
   },
   cardSubtitle: {
-    fontFamily: 'Poppins-Regular',
+    fontFamily: "Poppins-Regular",
     fontSize: 20,
-    color: 'rgba(0,0,0,0.6)',
+    color: "rgba(0,0,0,0.6)",
     marginTop: 2,
   },
   addButton: {
-    position: 'absolute',
-    alignSelf: 'center',
+    position: "absolute",
+    alignSelf: "center",
     backgroundColor: colors.BACKGROUND_YELLOW,
     paddingVertical: 10,
     paddingHorizontal: 26,
     width: width * 0.6,
   },
   buttonContainer: {
-    position: 'absolute',
+    position: "absolute",
     height: 120,
     width,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     backgroundColor: colors.WHITE_ISH,
     bottom: 0,
   },

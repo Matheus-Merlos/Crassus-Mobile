@@ -24,7 +24,7 @@ function addGradient(component) {
   );
 }
 
-function AuthStack() {
+export default function AuthStack() {
   return (
     <Stack.Navigator
       initialRouteName={screens.WELCOME}
@@ -45,5 +45,3 @@ function AuthStack() {
     </Stack.Navigator>
   );
 }
-
-export default AuthStack;
