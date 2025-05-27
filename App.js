@@ -10,10 +10,6 @@ import interLight from "./assets/fonts/Inter-Light.ttf";
 import poppinsSemiBold from "./assets/fonts/Poppins-SemiBold.ttf";
 import poppinsBlackItalic from "./assets/fonts/Poppins-BlackItalic.ttf";
 
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-
-import { useAtom } from "jotai";
-import { isLoggedInAtom } from "./src/jotai/store";
 import AppNavigator from "./src/navigation/AppNavigator";
 
 const { width, height } = Dimensions.get("window");
@@ -35,11 +31,8 @@ function addGradient(component) {
     </View>
   );
 }
-const Stack = createNativeStackNavigator();
 
 export default function App() {
-  const [isLoggedIn] = useAtom(isLoggedInAtom);
-
   const [fontsLoaded] = useFonts({
     "Poppins-Regular": poppinsRegular,
     "Poppins-SemiBold": poppinsSemiBold,
