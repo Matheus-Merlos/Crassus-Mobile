@@ -6,6 +6,7 @@ import * as screens from "../constants/screens";
 
 export default function WelcomeScreen() {
   const navigation = useNavigation();
+
   return (
     <View style={{ alignItems: "center" }}>
       <Image source={crassusIcon} style={styles.icon}></Image>

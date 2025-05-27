@@ -10,17 +10,6 @@ import interLight from "./assets/fonts/Inter-Light.ttf";
 import poppinsSemiBold from "./assets/fonts/Poppins-SemiBold.ttf";
 import poppinsBlackItalic from "./assets/fonts/Poppins-BlackItalic.ttf";
 
-import { useSelector } from "react-redux";
-
-import WelcomeScreen from "./src/screens/welcome";
-import LoginScreen from "./src/screens/login/login";
-import RegisterScreen from "./src/screens/login/register";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { NavigationContainer } from "@react-navigation/native";
-
-import * as screens from "./src/constants/screens";
-import BottomTabNavigator from "./src/navigation/MainTabs";
-import MainTab from "./src/navigation/MainTabs";
 import AppNavigator from "./src/navigation/AppNavigator";
 
 const { width, height } = Dimensions.get("window");
@@ -42,10 +31,8 @@ function addGradient(component) {
     </View>
   );
 }
-const Stack = createNativeStackNavigator();
 
 export default function App() {
-  const isLoggedIn = true;
   const [fontsLoaded] = useFonts({
     "Poppins-Regular": poppinsRegular,
     "Poppins-SemiBold": poppinsSemiBold,
