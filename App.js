@@ -1,3 +1,4 @@
+/* eslint-disable react/no-children-prop */
 import { StyleSheet, Dimensions, View } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import * as colors from "./src/constants/colors";
@@ -10,20 +11,16 @@ import interBold from "./assets/fonts/Inter-Bold.ttf";
 import interLight from "./assets/fonts/Inter-Light.ttf";
 import poppinsSemiBold from "./assets/fonts/Poppins-SemiBold.ttf";
 
-//Imports do react redux
-import { useSelector } from "react-redux";
-
 import WelcomeScreen from "./src/screens/welcome";
 import LoginScreen from "./src/screens/login/login";
 import RegisterScreen from "./src/screens/login/register";
-import PerformanceScreen from "./src/screens/performance";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NavigationContainer } from "@react-navigation/native";
 
 import * as screens from "./src/constants/screens";
 import BottomTabNavigator from "./src/navigation/BottomTabNavigator";
-import MoreScreen from "./src/screens/config/moreScreen";
-import NutritionScreen from "./src/screens/nutrition/nutrition";
+import { useAtom } from "jotai";
+import { isLoggedInAtom } from "./src/jotai/store";
 
 const { width, height } = Dimensions.get("window");
 
@@ -47,7 +44,8 @@ function addGradient(component) {
 const Stack = createNativeStackNavigator();
 
 export default function App() {
-  const isLoggedIn = true;
+  const [isLoggedIn] = useAtom(isLoggedInAtom);
+
   const [fontsLoaded] = useFonts({
     "Poppins-Regular": poppinsRegular,
     "Poppins-SemiBold": poppinsSemiBold,
