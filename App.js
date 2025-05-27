@@ -1,26 +1,20 @@
-/* eslint-disable react/no-children-prop */
 import { StyleSheet, Dimensions, View } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import * as colors from "./src/constants/colors";
 
-//Imports exclusivos de fontes
 import { useFonts } from "expo-font";
 import poppinsRegular from "./assets/fonts/Poppins-Regular.ttf";
 import publicSansBold from "./assets/fonts/PublicSans-Bold.ttf";
 import interBold from "./assets/fonts/Inter-Bold.ttf";
 import interLight from "./assets/fonts/Inter-Light.ttf";
 import poppinsSemiBold from "./assets/fonts/Poppins-SemiBold.ttf";
+import poppinsBlackItalic from "./assets/fonts/Poppins-BlackItalic.ttf";
 
-import WelcomeScreen from "./src/screens/welcome";
-import LoginScreen from "./src/screens/login/login";
-import RegisterScreen from "./src/screens/login/register";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { NavigationContainer } from "@react-navigation/native";
 
-import * as screens from "./src/constants/screens";
-import BottomTabNavigator from "./src/navigation/BottomTabNavigator";
 import { useAtom } from "jotai";
 import { isLoggedInAtom } from "./src/jotai/store";
+import AppNavigator from "./src/navigation/AppNavigator";
 
 const { width, height } = Dimensions.get("window");
 
@@ -50,6 +44,7 @@ export default function App() {
     "Poppins-Regular": poppinsRegular,
     "Poppins-SemiBold": poppinsSemiBold,
     "PublicSans-Bold": publicSansBold,
+    "Poppins-BlackItalic": poppinsBlackItalic,
     "Inter-Bold": interBold,
     "Inter-Light": interLight,
   });
@@ -59,31 +54,7 @@ export default function App() {
   return (
     <>
       <View style={styles.mainView}>
-        <NavigationContainer>
-          {isLoggedIn ? (
-            <BottomTabNavigator />
-          ) : (
-            <Stack.Navigator
-              screenOptions={{ headerShown: false }}
-              initialRouteName={screens.WELCOME}
-            >
-              <>
-                <Stack.Screen
-                  name={screens.WELCOME}
-                  children={() => addGradient(<WelcomeScreen />)}
-                />
-                <Stack.Screen
-                  name={screens.LOGIN}
-                  children={() => addGradient(<LoginScreen />)}
-                />
-                <Stack.Screen
-                  name={screens.REGISTER}
-                  children={() => addGradient(<RegisterScreen />)}
-                />
-              </>
-            </Stack.Navigator>
-          )}
-        </NavigationContainer>
+        <AppNavigator />
       </View>
     </>
   );
