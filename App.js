@@ -19,7 +19,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NavigationContainer } from "@react-navigation/native";
 
 import * as screens from "./src/constants/screens";
-import BottomTabNavigator from "./src/navigation/BottomTabNavigator";
+import BottomTabNavigator from "./src/navigation/MainTabs";
 
 const { width, height } = Dimensions.get("window");
 
