@@ -15,14 +15,11 @@ import { useSelector } from "react-redux";
 import WelcomeScreen from "./src/screens/welcome";
 import LoginScreen from "./src/screens/login/login";
 import RegisterScreen from "./src/screens/login/register";
-import PerformanceScreen from "./src/screens/performance";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NavigationContainer } from "@react-navigation/native";
 
 import * as screens from "./src/constants/screens";
 import BottomTabNavigator from "./src/navigation/BottomTabNavigator";
-import MoreScreen from "./src/screens/config/moreScreen";
-import NutritionScreen from "./src/screens/nutrition/nutrition";
 
 const { width, height } = Dimensions.get("window");
 

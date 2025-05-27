@@ -3,7 +3,6 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { LinearGradient } from "expo-linear-gradient";
 import { Dimensions, View } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
 
 import RunIcon from "../../assets/icons/runIcon";
 import NutritionIcon from "../../assets/icons/nutritionIcon";
