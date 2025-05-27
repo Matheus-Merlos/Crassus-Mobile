@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import { StyleSheet, Dimensions, View } from "react-native";
+import { StyleSheet, Dimensions, View, ScrollView } from "react-native";
 import * as colors from "../../constants/colors";
 import MealDay from "./components/mealDay";
 import CrassusButton from "../../components/crassusButton";
@@ -56,9 +56,11 @@ export default function NutritionScreen() {
         paddingTop={25}
         isScroll
       >
-        {mockMeals.map((day, index) => (
-          <MealDay key={index} date={day.date} meals={day.meals} />
-        ))}
+        <ScrollView>
+          {mockMeals.map((day, index) => (
+            <MealDay key={index} date={day.date} meals={day.meals} />
+          ))}
+        </ScrollView>
       </WhiteIshBackground>
       <View style={styles.button}>
         <CrassusButton

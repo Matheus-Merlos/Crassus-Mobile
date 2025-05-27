@@ -1,4 +1,4 @@
-import Svg, { Path, Circle } from "react-native-svg";
+import Svg, { Path } from "react-native-svg";
 
 const RunIcon = () => (
   <Svg width={36} height={36} viewBox="0 0 68 80" fill="none">

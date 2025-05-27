@@ -15,14 +15,13 @@ import { useSelector } from "react-redux";
 import WelcomeScreen from "./src/screens/welcome";
 import LoginScreen from "./src/screens/login/login";
 import RegisterScreen from "./src/screens/login/register";
-import PerformanceScreen from "./src/screens/performance";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NavigationContainer } from "@react-navigation/native";
 
 import * as screens from "./src/constants/screens";
-import BottomTabNavigator from "./src/navigation/BottomTabNavigator";
-import MoreScreen from "./src/screens/config/moreScreen";
-import NutritionScreen from "./src/screens/nutrition/nutrition";
+import BottomTabNavigator from "./src/navigation/MainTabs";
+import MainTab from "./src/navigation/MainTabs";
+import AppNavigator from "./src/navigation/AppNavigator";
 
 const { width, height } = Dimensions.get("window");
 
@@ -61,31 +60,7 @@ export default function App() {
   return (
     <>
       <View style={styles.mainView}>
-        <NavigationContainer>
-          {isLoggedIn ? (
-            <BottomTabNavigator />
-          ) : (
-            <Stack.Navigator
-              screenOptions={{ headerShown: false }}
-              initialRouteName={screens.WELCOME}
-            >
-              <>
-                <Stack.Screen
-                  name={screens.WELCOME}
-                  children={() => addGradient(<WelcomeScreen />)}
-                />
-                <Stack.Screen
-                  name={screens.LOGIN}
-                  children={() => addGradient(<LoginScreen />)}
-                />
-                <Stack.Screen
-                  name={screens.REGISTER}
-                  children={() => addGradient(<RegisterScreen />)}
-                />
-              </>
-            </Stack.Navigator>
-          )}
-        </NavigationContainer>
+        <AppNavigator />
       </View>
     </>
   );
