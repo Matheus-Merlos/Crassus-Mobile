@@ -19,6 +19,7 @@ import RunFinishedScreen from "../screens/runFinished";
 
 import * as colors from "../constants/colors";
 import * as screens from "../constants/screens";
+import AddMealScreen from "../screens/nutrition/addMeal";
 
 const { width, height } = Dimensions.get("window");
 const Tab = createBottomTabNavigator();
@@ -41,9 +42,27 @@ function addGradient(component) {
 function RaceStack() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="RaceHistory" children={() => addGradient(<RaceScreen />)} />
+      <Stack.Screen
+        name="RaceHistory"
+        children={() => addGradient(<RaceScreen />)}
+      />
       <Stack.Screen name="RunProgress" component={RunProgressScreen} />
       <Stack.Screen name="RunFinished" component={RunFinishedScreen} />
+    </Stack.Navigator>
+  );
+}
+
+function MealsStack() {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen
+        name={screens.NUTRITION}
+        children={() => addGradient(<NutritionScreen />)}
+      />
+      <Stack.Screen
+        name={screens.ADDMEAL}
+        children={() => addGradient(<AddMealScreen />)}
+      />
     </Stack.Navigator>
   );
 }
@@ -67,16 +86,20 @@ const BottomTabNavigator = () => (
       name={screens.PERFORMANCE}
       children={() => addGradient(<PerformanceScreen />)}
       options={{
-        tabBarIcon: ({ color, size }) => <PerformanceIcon color={color} size={size} />,
+        tabBarIcon: ({ color, size }) => (
+          <PerformanceIcon color={color} size={size} />
+        ),
       }}
     />
 
     {/* Nutrição */}
     <Tab.Screen
       name={screens.NUTRITION}
-      children={() => addGradient(<NutritionScreen />)}
+      component={MealsStack}
       options={{
-        tabBarIcon: ({ color, size }) => <NutritionIcon color={color} size={size} />,
+        tabBarIcon: ({ color, size }) => (
+          <NutritionIcon color={color} size={size} />
+        ),
       }}
     />
 
