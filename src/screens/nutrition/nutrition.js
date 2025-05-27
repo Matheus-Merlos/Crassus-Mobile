@@ -4,7 +4,7 @@ import * as colors from "../../constants/colors";
 import MealDay from "./components/mealDay";
 import CrassusButton from "../../components/crassusButton";
 import WhiteIshBackground from "../../components/whiteIshBackground";
-import * as screes from "../../constants/screens"
+import * as screes from "../../constants/screens";
 
 export default function NutritionScreen() {
   const navigation = useNavigation();
