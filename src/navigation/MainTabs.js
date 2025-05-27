@@ -3,7 +3,6 @@ import * as colors from "../constants/colors";
 import * as screens from "../constants/screens";
 
 //screens and stacks
-import PerformanceScreen from "../screens/performance";
 
 //icons
 import PerformanceIcon from "../../assets/icons/performanceIcon";

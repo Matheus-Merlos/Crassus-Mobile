@@ -38,7 +38,7 @@ export default function WhiteIshBackground({
       <Text style={styles.title}>{title}</Text>
       {isScroll ? (
         <ScrollView contentContainerStyle={styles.background}>
-          {children}
+          <ScrollView>{children}</ScrollView>
         </ScrollView>
       ) : (
         <View style={styles.background}>{children}</View>

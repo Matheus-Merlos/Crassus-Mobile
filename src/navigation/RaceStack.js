@@ -1,9 +1,10 @@
+/* eslint-disable react/no-children-prop */
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Dimensions, View } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import RunProgressScreen from "../screens/runProgress";
 import RunFinishedScreen from "../screens/runFinished";
-import * as colors from "../constants/screens";
+import * as colors from "../constants/colors";
 import RaceScreen from "../screens/race";
 
 const Stack = createNativeStackNavigator();

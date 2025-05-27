@@ -54,13 +54,13 @@ export default function NutritionScreen() {
         titleDistanceToTop={75}
         screenPercentage={75}
         paddingTop={25}
-        isScroll
+        isScroll={true}
       >
-        <ScrollView>
-          {mockMeals.map((day, index) => (
-            <MealDay key={index} date={day.date} meals={day.meals} />
-          ))}
-        </ScrollView>
+        {/* <ScrollView> */}
+        {mockMeals.map((day, index) => (
+          <MealDay key={index} date={day.date} meals={day.meals} />
+        ))}
+        {/* </ScrollView> */}
       </WhiteIshBackground>
       <View style={styles.button}>
         <CrassusButton
