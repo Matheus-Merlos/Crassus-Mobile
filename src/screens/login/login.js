@@ -3,8 +3,6 @@ import * as colors from "../../constants/colors";
 import FloatingLabelInput from "../../components/floatingLabelInput";
 import { useState } from "react";
 import CrassusButton from "../../components/crassusButton";
-import * as actions from "../../redux/actions";
-import { useDispatch } from "react-redux";
 import BackButton from "../../components/backButton";
 import { useNavigation } from "@react-navigation/native";
 import * as screens from "../../constants/screens";
@@ -13,8 +11,6 @@ import WhiteIshBackground from "../../components/whiteIshBackground";
 export default function LoginScreen() {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
-
-  const dispatch = useDispatch();
 
   function handleSubmit() {
     navigation.navigate(screens.NUTRITION);

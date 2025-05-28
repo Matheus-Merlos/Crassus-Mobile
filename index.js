@@ -1,16 +1,12 @@
 import { registerRootComponent } from "expo";
 
 import App from "./App";
-import { Provider } from "react-redux";
-import { loginStore, loginPersistor } from "./src/redux/stores";
-import { PersistGate } from "redux-persist/integration/react";
+import { Provider } from "jotai";
 
 function Root() {
   return (
-    <Provider store={loginStore}>
-      <PersistGate loading={null} persistor={loginPersistor}>
-        <App />
-      </PersistGate>
+    <Provider>
+      <App />
     </Provider>
   );
 }
