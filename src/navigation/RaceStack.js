@@ -6,6 +6,7 @@ import RunProgressScreen from "../screens/runProgress";
 import RunFinishedScreen from "../screens/runFinished";
 import * as colors from "../constants/colors";
 import RaceScreen from "../screens/race";
+import * as screens from "../constants/screens";
 
 const Stack = createNativeStackNavigator();
 const { width, height } = Dimensions.get("window");
@@ -26,7 +27,10 @@ function addGradient(component) {
 
 export default function RaceStack() {
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Navigator
+      screenOptions={{ headerShown: false }}
+      initialRouteName={screens.WELCOME}
+    >
       <Stack.Screen
         name="RaceHistory"
         children={() => addGradient(<RaceScreen />)}

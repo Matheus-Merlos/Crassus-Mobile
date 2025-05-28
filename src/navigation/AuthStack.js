@@ -1,3 +1,4 @@
+/* eslint-disable react/no-children-prop */
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { LinearGradient } from "expo-linear-gradient";
 import { Dimensions, View } from "react-native";

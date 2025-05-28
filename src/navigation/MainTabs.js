@@ -3,17 +3,16 @@ import * as colors from "../constants/colors";
 import * as screens from "../constants/screens";
 
 //screens and stacks
-
-//icons
-import PerformanceIcon from "../../assets/icons/performanceIcon";
-import NutritionIcon from "../../assets/icons/nutritionIcon";
 import RaceStack from "./RaceStack";
 import MealsStack from "./MealsStack";
-import MoreScreen from "../screens/config/moreScreen";
-import RunIcon from "../../assets/icons/runIcon";
-import MoreIcon from "../../assets/icons/more";
 import MoreStack from "./MoreStack";
 import PerformanceStack from "./PerformanceStack";
+
+//icons
+import MoreIcon from "../../assets/icons/more";
+import PerformanceIcon from "../../assets/icons/performanceIcon";
+import NutritionIcon from "../../assets/icons/nutritionIcon";
+import RunIcon from "../../assets/icons/runIcon";
 
 const Tab = createBottomTabNavigator();
 
