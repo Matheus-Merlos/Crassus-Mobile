@@ -60,6 +60,8 @@ export default function RaceScreen() {
         { name: "Corrida 94", distance: 3.71 },
         { name: "Corrida 93", distance: 4.65 },
         { name: "Corrida 92", distance: 4.29 },
+        { name: "Corrida 91", distance: 4.29 },
+        { name: "Corrida 90", distance: 4.29 },
       ],
     },
   ];
