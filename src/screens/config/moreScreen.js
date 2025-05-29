@@ -2,12 +2,34 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import WhiteIshBackground from "../../components/whiteIshBackground";
 import * as colors from "../../constants/colors";
 import Svg, { Path } from "react-native-svg";
+import { useAtom } from "jotai";
+import {
+  emailAtom,
+  idAtom,
+  isLoggedInAtom,
+  nameAtom,
+  tokenAtom,
+} from "../../jotai/store";
 
 export default function MoreScreen() {
+  const [, setIsLoggedIn] = useAtom(isLoggedInAtom);
+  const [, setId] = useAtom(idAtom);
+  const [, setName] = useAtom(nameAtom);
+  const [, setJotaiEmail] = useAtom(emailAtom);
+  const [, setToken] = useAtom(tokenAtom);
+
   const mockUser = {
     name: "John Doe",
     email: "text@example.com",
   };
+
+  function handleDisconnect() {
+    setIsLoggedIn(false);
+    setId(null);
+    setName(null);
+    setJotaiEmail(null);
+    setToken(null);
+  }
   return (
     <WhiteIshBackground
       title="Seu Perfil"
@@ -70,7 +92,7 @@ export default function MoreScreen() {
           <Path d="M13.1717 12.0007L8.22192 7.05093L9.63614 5.63672L16.0001 12.0007L9.63614 18.3646L8.22192 16.9504L13.1717 12.0007Z" />
         </Svg>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.option}>
+      <TouchableOpacity style={styles.option} onPress={handleDisconnect}>
         <View style={styles.optionTextIcon}>
           <Svg
             width={50}

@@ -7,14 +7,47 @@ import BackButton from "../../components/backButton";
 import { useNavigation } from "@react-navigation/native";
 import * as screens from "../../constants/screens";
 import WhiteIshBackground from "../../components/whiteIshBackground";
+import { useAtom } from "jotai";
+import {
+  emailAtom,
+  idAtom,
+  isLoggedInAtom,
+  nameAtom,
+  tokenAtom,
+} from "../../jotai/store";
+import axios from "../../utils/axios";
 
 export default function LoginScreen() {
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  function handleSubmit() {
-    navigation.navigate(screens.NUTRITION);
-    //dispatch(actions.login(email, password));
+  const [, setIsLoggedIn] = useAtom(isLoggedInAtom);
+  const [, setId] = useAtom(idAtom);
+  const [, setName] = useAtom(nameAtom);
+  const [, setJotaiEmail] = useAtom(emailAtom);
+  const [, setToken] = useAtom(tokenAtom);
+
+  async function handleSubmit() {
+    const requestData = {
+      email,
+      password,
+    };
+
+    let request;
+    try {
+      request = await axios.post("/user/login", requestData);
+    } catch (error) {
+      console.log(error.response.data);
+      return;
+    }
+
+    const { id, name, email: responseEmail, token } = request.data;
+
+    setIsLoggedIn(true);
+    setId(id);
+    setName(name);
+    setJotaiEmail(responseEmail);
+    setToken(token);
   }
   const navigation = useNavigation();
 
