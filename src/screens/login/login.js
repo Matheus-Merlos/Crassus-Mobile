@@ -14,7 +14,7 @@ import {
   isLoggedInAtom,
   nameAtom,
   tokenAtom,
-} from "../../jotai/store";
+} from "../../jotai/asyncStore";
 import axios from "../../utils/axios";
 
 export default function LoginScreen() {
