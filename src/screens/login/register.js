@@ -200,7 +200,7 @@ export default function RegisterScreen() {
           <Text style={styles.dontHave}>Já tem uma conta?</Text>
           <Text
             style={styles.register}
-            onPress={() => navigation.navigate(screens.LOGIN)}
+            onPress={() => navigation.replace(screens.LOGIN)}
           >
             Fazer Login
           </Text>

@@ -90,7 +90,7 @@ export default function LoginScreen() {
           <Text style={styles.dontHave}>Não tem uma conta?</Text>
           <Text
             style={styles.register}
-            onPress={() => navigation.navigate(screens.REGISTER)}
+            onPress={() => navigation.replace(screens.REGISTER)}
           >
             Cadastre-se
           </Text>
