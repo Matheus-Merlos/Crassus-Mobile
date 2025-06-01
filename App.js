@@ -1,6 +1,4 @@
-import { StyleSheet, Dimensions, View } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
-import * as colors from "./src/constants/colors";
+import { StyleSheet, View } from "react-native";
 
 import { useFonts } from "expo-font";
 import poppinsRegular from "./assets/fonts/Poppins-Regular.ttf";
@@ -9,28 +7,9 @@ import interBold from "./assets/fonts/Inter-Bold.ttf";
 import interLight from "./assets/fonts/Inter-Light.ttf";
 import poppinsSemiBold from "./assets/fonts/Poppins-SemiBold.ttf";
 import poppinsBlackItalic from "./assets/fonts/Poppins-BlackItalic.ttf";
+import { Provider } from "jotai";
 
 import AppNavigator from "./src/navigation/AppNavigator";
-
-const { width, height } = Dimensions.get("window");
-
-function addGradient(component) {
-  return (
-    <View style={{ flex: 1 }}>
-      <LinearGradient
-        colors={[colors.BACKGROUND_YELLOW, colors.BACKGROUND_RED]}
-        style={{
-          position: "absolute",
-          width,
-          height,
-        }}
-        start={{ x: 1, y: 0 }}
-        end={{ x: 0, y: 0 }}
-      />
-      {component}
-    </View>
-  );
-}
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -45,11 +24,11 @@ export default function App() {
   if (!fontsLoaded) return null;
 
   return (
-    <>
+    <Provider>
       <View style={styles.mainView}>
         <AppNavigator />
       </View>
-    </>
+    </Provider>
   );
 }
 
