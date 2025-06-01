@@ -1,39 +1,15 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { Dimensions, View } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
 import * as screens from "../constants/screens";
-import * as colors from "../constants/colors";
 import NutritionScreen from "../screens/nutrition/nutrition";
 import AddMealScreen from "../screens/nutrition/addMeal";
 
 const Stack = createNativeStackNavigator();
-const { width, height } = Dimensions.get("window");
-
-function addGradient(component) {
-  return (
-    <View style={{ flex: 1 }}>
-      <LinearGradient
-        colors={[colors.BACKGROUND_YELLOW, colors.BACKGROUND_RED]}
-        style={{ position: "absolute", width, height }}
-        start={{ x: 1, y: 0 }}
-        end={{ x: 0, y: 0 }}
-      />
-      {component}
-    </View>
-  );
-}
 
 export default function MealsStack() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen
-        name={screens.NUTRITION}
-        children={() => addGradient(<NutritionScreen />)}
-      />
-      <Stack.Screen
-        name={screens.ADDMEAL}
-        children={() => addGradient(<AddMealScreen />)}
-      />
+      <Stack.Screen name={screens.NUTRITION} component={NutritionScreen} />
+      <Stack.Screen name={screens.ADDMEAL} component={AddMealScreen} />
     </Stack.Navigator>
   );
 }
