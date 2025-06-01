@@ -16,6 +16,7 @@ import {
   tokenAtom,
 } from "../../jotai/asyncStore";
 import axios from "../../utils/axios";
+import { isLoadingAtom } from "../../jotai/store";
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
@@ -27,6 +28,8 @@ export default function LoginScreen() {
   const [, setJotaiEmail] = useAtom(emailAtom);
   const [, setToken] = useAtom(tokenAtom);
 
+  const [isLoading, setIsLoading] = useAtom(isLoadingAtom);
+
   async function handleSubmit() {
     const requestData = {
       email,
@@ -34,11 +37,14 @@ export default function LoginScreen() {
     };
 
     let request;
+    setIsLoading(true);
     try {
-      request = await axios.post("/user/login", requestData);
+      request = await axios.post("login", requestData);
     } catch (error) {
       console.log(error.response.data);
       return;
+    } finally {
+      setIsLoading(false);
     }
 
     const { id, name, email: responseEmail, token } = request.data;

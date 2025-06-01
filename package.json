@@ -24,6 +24,7 @@
     "react-native": "0.79.2",
     "react-native-circular-progress": "^1.4.1",
     "react-native-element-dropdown": "^2.12.4",
+    "react-native-loading-spinner-overlay": "^3.0.1",
     "react-native-safe-area-context": "5.4.0",
     "react-native-screens": "~4.10.0",
     "react-native-svg": "15.11.2"

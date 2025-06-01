@@ -1,4 +1,10 @@
-import { StyleSheet, View } from "react-native";
+import {
+  ActivityIndicator,
+  StyleSheet,
+  View,
+  Text,
+  Dimensions,
+} from "react-native";
 
 import { useFonts } from "expo-font";
 import poppinsRegular from "./assets/fonts/Poppins-Regular.ttf";
@@ -7,11 +13,19 @@ import interBold from "./assets/fonts/Inter-Bold.ttf";
 import interLight from "./assets/fonts/Inter-Light.ttf";
 import poppinsSemiBold from "./assets/fonts/Poppins-SemiBold.ttf";
 import poppinsBlackItalic from "./assets/fonts/Poppins-BlackItalic.ttf";
-import { Provider } from "jotai";
+import { Provider, useAtom } from "jotai";
+import { isLoadingAtom } from "./src/jotai/store";
+import * as colors from "./src/constants/colors";
 
 import AppNavigator from "./src/navigation/AppNavigator";
+import { LinearGradient } from "expo-linear-gradient";
+import Spinner from "react-native-loading-spinner-overlay";
+
+const { width, height } = new Dimensions.get("screen");
 
 export default function App() {
+  const [isLoading] = useAtom(isLoadingAtom);
+
   const [fontsLoaded] = useFonts({
     "Poppins-Regular": poppinsRegular,
     "Poppins-SemiBold": poppinsSemiBold,
@@ -24,11 +38,16 @@ export default function App() {
   if (!fontsLoaded) return null;
 
   return (
-    <Provider>
-      <View style={styles.mainView}>
-        <AppNavigator />
-      </View>
-    </Provider>
+    <View style={styles.mainView}>
+      <AppNavigator />
+      <Spinner
+        visible={isLoading}
+        textContent={"Carregando..."}
+        textStyle={{ color: "#FFF" }}
+        animation="fade"
+        overlayColor="rgba(0,0,0,0.6)"
+      />
+    </View>
   );
 }
 
