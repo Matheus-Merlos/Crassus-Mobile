@@ -4,3 +4,4 @@ export const WHITE = "#fff";
 export const WHITE_ISH = "#D9D9D9";
 export const SMOOTH_YELLOW = "#D9A404";
 export const PRIMARY_RED = "#FF0000";
+export const BLACK = "#000";
