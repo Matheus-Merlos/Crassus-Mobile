@@ -1,5 +1,6 @@
 import { Dimensions, ScrollView, StyleSheet, Text, View } from "react-native";
 import * as colors from "../constants/colors";
+import { LinearGradient } from "expo-linear-gradient";
 
 export default function WhiteIshBackground({
   title = "",
@@ -35,14 +36,22 @@ export default function WhiteIshBackground({
   });
   return (
     <>
-      <Text style={styles.title}>{title}</Text>
-      {isScroll ? (
-        <ScrollView contentContainerStyle={styles.background}>
-          <ScrollView>{children}</ScrollView>
-        </ScrollView>
-      ) : (
-        <View style={styles.background}>{children}</View>
-      )}
+      <View style={{ flex: 1, width, height }}>
+        <LinearGradient
+          colors={[colors.BACKGROUND_YELLOW, colors.BACKGROUND_RED]}
+          style={{ position: "absolute", width, height, zIndex: -10 }}
+          start={{ x: 1, y: 0 }}
+          end={{ x: 0, y: 0 }}
+        />
+        <Text style={styles.title}>{title}</Text>
+        {isScroll ? (
+          <ScrollView contentContainerStyle={styles.background}>
+            <ScrollView>{children}</ScrollView>
+          </ScrollView>
+        ) : (
+          <View style={styles.background}>{children}</View>
+        )}
+      </View>
     </>
   );
 }
