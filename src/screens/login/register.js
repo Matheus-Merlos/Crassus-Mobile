@@ -15,8 +15,13 @@ import { Dropdown } from "react-native-element-dropdown";
 import { useNavigation } from "@react-navigation/native";
 import * as screens from "../../constants/screens";
 import WhiteIshBackground from "../../components/whiteIshBackground";
+import axios from "../../utils/axios";
+import { useAtom } from "jotai";
+import { isLoadingAtom } from "../../jotai/store";
 
 export default function RegisterScreen() {
+  const navigation = useNavigation();
+
   const [page, setPage] = useState(0);
   const slideAnim = useRef(new Animated.Value(0)).current;
 
@@ -29,6 +34,8 @@ export default function RegisterScreen() {
   const [height, setHeight] = useState("");
   const [weight, setWeight] = useState("");
   const [gender, setGender] = useState(null);
+
+  const [, setIsLoading] = useAtom(isLoadingAtom);
 
   const genders = [
     { label: "Masculino", value: "M" },
@@ -58,28 +65,33 @@ export default function RegisterScreen() {
     setBirthDate(cleanedText);
   }
 
-  function handleSubmit() {
+  async function handleSubmit() {
     if (password !== confirmPassword) {
       //lógica aqui (WIP)
     }
 
-    const [day, month, year] = birthdate.split("/");
-    const birthdateISO8601 = `${year}-${month}-${day}`;
-
-    const JSONBody = {
+    const requestData = {
       name,
       email,
-      birthdate: birthdateISO8601,
-      gender,
-      height,
-      weight,
       password,
+      birthdate,
+      gender,
+      height: height.replaceAll(",", "."),
+      weight: weight.replaceAll(",", "."),
     };
 
-    console.log(JSONBody);
-  }
+    setIsLoading(true);
+    try {
+      await axios.post("register", requestData);
+    } catch (error) {
+      console.log(error.response.data);
+      return;
+    } finally {
+      setIsLoading(false);
+    }
 
-  const navigation = useNavigation();
+    navigation.navigate(screens.LOGIN);
+  }
 
   return (
     <>

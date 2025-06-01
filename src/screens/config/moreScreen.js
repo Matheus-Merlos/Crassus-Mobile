@@ -9,7 +9,7 @@ import {
   isLoggedInAtom,
   nameAtom,
   tokenAtom,
-} from "../../jotai/store";
+} from "../../jotai/asyncStore";
 
 export default function MoreScreen() {
   const [, setIsLoggedIn] = useAtom(isLoggedInAtom);
