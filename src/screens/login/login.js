@@ -28,7 +28,7 @@ export default function LoginScreen() {
   const [, setJotaiEmail] = useAtom(emailAtom);
   const [, setToken] = useAtom(tokenAtom);
 
-  const [isLoading, setIsLoading] = useAtom(isLoadingAtom);
+  const [, setIsLoading] = useAtom(isLoadingAtom);
 
   async function handleSubmit() {
     const requestData = {
