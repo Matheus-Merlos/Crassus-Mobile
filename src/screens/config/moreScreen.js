@@ -25,6 +25,7 @@ export default function MoreScreen() {
   const [, setToken] = useAtom(tokenAtom);
 
   const firstNames = useMemo(() => {
+    if (!name) return "";
     return name.split(" ").slice(0, 2).join(" ");
   }, [name]);
 
