@@ -17,6 +17,7 @@ import {
 } from "../../jotai/asyncStore";
 import axios from "../../utils/axios";
 import { isLoadingAtom } from "../../jotai/store";
+import Toast from "react-native-toast-message";
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
@@ -30,18 +31,52 @@ export default function LoginScreen() {
 
   const [, setIsLoading] = useAtom(isLoadingAtom);
 
+  const [emailFieldMessage, setEmailFieldMessage] = useState("");
+  const [passwordFieldMessage, setPasswordFieldMessage] = useState("");
+
   async function handleSubmit() {
     const requestData = {
       email,
       password,
     };
 
+    if (!email) {
+      setEmailFieldMessage("Forneça um e-mail válido");
+      return;
+    }
+
+    if (!password) {
+      setPasswordFieldMessage("Forneça uma senha válida");
+      return;
+    }
+
     let request;
     setIsLoading(true);
     try {
       request = await axios.post("login", requestData);
     } catch (error) {
-      console.log(error.response.data);
+      const message = error.response.data.message;
+      if (message[0].includes("email")) {
+        setEmailFieldMessage("Forneça um e-mail válido");
+        return;
+      }
+
+      switch (error.response.status) {
+        case 404: {
+          Toast.show({
+            type: "error",
+            text1: "Não existe um usuário com este e-mail",
+          });
+          break;
+        }
+        case 400: {
+          Toast.show({
+            type: "error",
+            text1: "Senha incorreta para este usuário",
+          });
+          break;
+        }
+      }
       return;
     } finally {
       setIsLoading(false);
@@ -70,6 +105,7 @@ export default function LoginScreen() {
           color={colors.BACKGROUND_RED}
           value={email}
           setValueFunction={setEmail}
+          warningMessage={emailFieldMessage}
         />
         <FloatingLabelInput
           label="Senha"
@@ -78,6 +114,7 @@ export default function LoginScreen() {
           setValueFunction={setPassword}
           isPassword={true}
           style={{ marginTop: 30 }}
+          warningMessage={passwordFieldMessage}
         />
         <Text style={styles.forgotPassword}>Esqueceu sua senha?</Text>
         <CrassusButton
