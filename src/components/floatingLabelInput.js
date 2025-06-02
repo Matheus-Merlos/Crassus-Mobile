@@ -1,7 +1,13 @@
 import { useRef, useState } from "react";
-import { TextInput, Animated, View, Pressable, StyleSheet } from "react-native";
+import {
+  TextInput,
+  Animated,
+  View,
+  Pressable,
+  StyleSheet,
+  Text,
+} from "react-native";
 
-import Svg, { Path } from "react-native-svg";
 import { EyeOffSVG, EyeSVG } from "../constants/svgs";
 import * as colors from "../constants/colors";
 
@@ -13,6 +19,7 @@ export default function FloatingLabelInput({
   color = "#000",
   isPassword = false,
   width = 350,
+  warningMessage = "",
 }) {
   const [isVisible, setIsVisible] = useState(isPassword);
 
@@ -83,6 +90,7 @@ export default function FloatingLabelInput({
         onBlur={handleBlur}
         secureTextEntry={isVisible}
       />
+      <Text style={styles.warningMessage}>{warningMessage}</Text>
       {isPassword && (
         <Pressable
           onPress={() => setIsVisible(!isVisible)}
@@ -103,5 +111,11 @@ const styles = StyleSheet.create({
   toggleViewButton: {
     position: "absolute",
     right: 0,
+  },
+  warningMessage: {
+    position: "absolute",
+    top: 35,
+    color: colors.PRIMARY_RED,
+    fontFamily: "Inter-Bold",
   },
 });
