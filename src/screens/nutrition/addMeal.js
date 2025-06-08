@@ -12,6 +12,11 @@ import EditIcon from "../../../assets/icons/editIcon";
 import CrassusButton from "../../components/crassusButton";
 import FoodItem from "./components/foodItem";
 import ConfirmIcon from "../../../assets/icons/confirmIcon";
+import { useNavigation } from "@react-navigation/native";
+import * as screens from "../../constants/screens";
+import { useAtom } from "jotai";
+import { mealFoodListAtom } from "../../jotai/store";
+import { useMemo } from "react";
 
 const mealData = [
   { id: "1", name: "Peito de Frango", amount: "150 gramas" },
@@ -28,6 +33,12 @@ export default function AddMealScreen({
   fats = 41,
   onEdit,
 }) {
+  const navigation = useNavigation();
+
+  const [mealFoodList, setMealFoodList] = useAtom(mealFoodListAtom);
+
+  console.log(mealFoodList);
+
   return (
     <WhiteIshBackground screenPercentage={80}>
       <View style={styles.card}>
@@ -64,10 +75,7 @@ export default function AddMealScreen({
         renderItem={({ item }) => (
           <FoodItem name={item.name} amount={item.amount} />
         )}
-        // You might want to add contentContainerStyle for padding around the list items
         contentContainerStyle={styles.foodListContent}
-        // If the card at the top needs to scroll with the list, it can be a ListHeaderComponent
-        // ListHeaderComponent={this.renderCardHeader} // if 'this' was a class component
       />
       <TouchableOpacity style={styles.iconButton}>
         <ConfirmIcon />
@@ -76,6 +84,7 @@ export default function AddMealScreen({
         text="Adicionar"
         color={colors.SMOOTH_YELLOW}
         style={styles.crassusButton}
+        onPress={() => navigation.navigate(screens.SEARCH_FOOD)}
       />
     </WhiteIshBackground>
   );
