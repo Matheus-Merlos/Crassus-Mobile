@@ -7,3 +7,4 @@ export const NUTRITION = "Nutrition";
 export const MEAL = "Meal";
 export const RACE = "Race";
 export const ADDMEAL = "AddMeal";
+export const SEARCH_FOOD = "SearchFood";
