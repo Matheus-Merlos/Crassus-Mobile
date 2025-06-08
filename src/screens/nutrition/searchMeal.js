@@ -12,9 +12,8 @@ import {
 import WhiteIshBackground from "../../components/whiteIshBackground";
 import { LunchSVG } from "../../constants/svgs";
 import { useAtom } from "jotai";
-import { mealFoodListAtom } from "../../jotai/store";
+import { isLoadingAtom, mealFoodListAtom } from "../../jotai/store";
 import { useNavigation } from "@react-navigation/native";
-import * as screens from "../../constants/screens";
 
 export default function SearchMeal() {
   const [foods, setFoods] = useState([]);

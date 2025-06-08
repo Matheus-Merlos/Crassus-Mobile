@@ -17,76 +17,115 @@ import * as screens from "../../constants/screens";
 import { useAtom } from "jotai";
 import { mealFoodListAtom } from "../../jotai/store";
 import { useMemo } from "react";
+import BackButton from "../../components/backButton";
 
-const mealData = [
-  { id: "1", name: "Peito de Frango", amount: "150 gramas" },
-  { id: "2", name: "Arroz Cozido", amount: "150 gramas" },
-  { id: "3", name: "Purê de Batata Doce", amount: "100 gramas" },
-];
+export default function AddMealScreen({ title = "Almoço 1", onEdit }) {
+  function sumObjectKey(list, key) {
+    if (!list) return 0;
 
-export default function AddMealScreen({
-  title = "Almoço 1",
-  time = "10:52 AM",
-  calories = 1182,
-  carbs = 131,
-  proteins = 71,
-  fats = 41,
-  onEdit,
-}) {
+    return list.reduce((total, item) => {
+      const value = Number(item[key]) || 0;
+      return total + value;
+    }, 0);
+  }
+
+  const now = new Date();
+
   const navigation = useNavigation();
 
   const [mealFoodList, setMealFoodList] = useAtom(mealFoodListAtom);
 
-  console.log(mealFoodList);
+  const calories = useMemo(
+    () => sumObjectKey(mealFoodList, "calories").toFixed(0),
+    [mealFoodList],
+  );
+  const carbs = useMemo(
+    () => sumObjectKey(mealFoodList, "carbs").toFixed(2),
+    [mealFoodList],
+  );
+  const proteins = useMemo(
+    () => sumObjectKey(mealFoodList, "proteins").toFixed(2),
+    [mealFoodList],
+  );
+  const fats = useMemo(
+    () => sumObjectKey(mealFoodList, "fats").toFixed(2),
+    [mealFoodList],
+  );
+
+  function handleGoBack() {
+    //Limpa a lista para ela não ficar salva misteriosamente
+    setMealFoodList([]);
+    navigation.goBack();
+  }
+
+  function handleFoodRemoval(foodIndex) {
+    const newList = mealFoodList.filter((item, index) => index !== foodIndex);
+
+    setMealFoodList(newList);
+  }
 
   return (
-    <WhiteIshBackground screenPercentage={80}>
-      <View style={styles.card}>
-        <View style={styles.headerRow}>
-          <Text style={styles.timestamp}>Hoje - {time}</Text>
-        </View>
-        <View style={styles.titleAndEditRow}>
-          <Text style={styles.title}>{title}</Text>
-          <TouchableOpacity onPress={onEdit} style={styles.editButton}>
-            <EditIcon color="#000" />
-          </TouchableOpacity>
-        </View>
-        <Text style={styles.caloriesValue}>{calories}</Text>
-        <Text style={styles.caloriesLabel}>Calorias</Text>
+    <>
+      <BackButton
+        color={colors.WHITE}
+        style={{ top: 57, left: 15 }}
+        action={handleGoBack}
+      />
+      <WhiteIshBackground screenPercentage={80} paddingTop={50}>
+        <View style={styles.card}>
+          <View style={styles.headerRow}>
+            <Text style={styles.timestamp}>
+              Hoje -{" "}
+              {`${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")}`}
+            </Text>
+          </View>
+          <View style={styles.titleAndEditRow}>
+            <Text style={styles.title}>{title}</Text>
+            <TouchableOpacity onPress={onEdit} style={styles.editButton}>
+              <EditIcon color="#000" />
+            </TouchableOpacity>
+          </View>
+          <Text style={styles.caloriesValue}>{calories}</Text>
+          <Text style={styles.caloriesLabel}>Calorias</Text>
 
-        <View style={styles.macrosRow}>
-          <View style={styles.macroItem}>
-            <Text style={styles.macroValue}>{carbs}g</Text>
-            <Text style={styles.macroLabel}>Carboidratos</Text>
-          </View>
-          <View style={styles.macroItem}>
-            <Text style={styles.macroValue}>{proteins}g</Text>
-            <Text style={styles.macroLabel}>Proteínas</Text>
-          </View>
-          <View style={styles.macroItem}>
-            <Text style={styles.macroValue}>{fats}g</Text>
-            <Text style={styles.macroLabel}>Gordura</Text>
+          <View style={styles.macrosRow}>
+            <View style={styles.macroItem}>
+              <Text style={styles.macroValue}>{carbs}g</Text>
+              <Text style={styles.macroLabel}>Carboidratos</Text>
+            </View>
+            <View style={styles.macroItem}>
+              <Text style={styles.macroValue}>{proteins}g</Text>
+              <Text style={styles.macroLabel}>Proteínas</Text>
+            </View>
+            <View style={styles.macroItem}>
+              <Text style={styles.macroValue}>{fats}g</Text>
+              <Text style={styles.macroLabel}>Gordura</Text>
+            </View>
           </View>
         </View>
-      </View>
-      <FlatList
-        data={mealData}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <FoodItem name={item.name} amount={item.amount} />
-        )}
-        contentContainerStyle={styles.foodListContent}
-      />
-      <TouchableOpacity style={styles.iconButton}>
-        <ConfirmIcon />
-      </TouchableOpacity>
-      <CrassusButton
-        text="Adicionar"
-        color={colors.SMOOTH_YELLOW}
-        style={styles.crassusButton}
-        onPress={() => navigation.navigate(screens.SEARCH_FOOD)}
-      />
-    </WhiteIshBackground>
+        <FlatList
+          data={mealFoodList}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={({ item, index }) => (
+            <FoodItem
+              name={item.name}
+              amount={`${item.quantity} gramas`}
+              onDelete={() => handleFoodRemoval(index)}
+            />
+          )}
+          contentContainerStyle={styles.foodListContent}
+        />
+        <TouchableOpacity style={styles.iconButton}>
+          <ConfirmIcon />
+        </TouchableOpacity>
+        <CrassusButton
+          text="Adicionar"
+          color={colors.SMOOTH_YELLOW}
+          style={styles.crassusButton}
+          onPress={() => navigation.navigate(screens.SEARCH_FOOD)}
+        />
+      </WhiteIshBackground>
+    </>
   );
 }
 
@@ -141,6 +180,7 @@ const styles = StyleSheet.create({
     color: "#000",
   },
   caloriesValue: {
+    marginTop: -25,
     fontSize: 84,
     fontFamily: "Poppins-BlackItalic",
     color: "#000",
