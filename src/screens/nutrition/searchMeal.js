@@ -12,7 +12,7 @@ import {
 import WhiteIshBackground from "../../components/whiteIshBackground";
 import { LunchSVG } from "../../constants/svgs";
 import { useAtom } from "jotai";
-import { isLoadingAtom, mealFoodListAtom } from "../../jotai/store";
+import { mealFoodListAtom } from "../../jotai/store";
 import { useNavigation } from "@react-navigation/native";
 
 export default function SearchMeal() {
