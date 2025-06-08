@@ -65,9 +65,13 @@ export default function RegisterScreen() {
     setBirthDate(cleanedText);
   }
 
+  const [passwordFieldMessage, setPasswordFieldMessage] = useState("");
+
   async function handleSubmit() {
     if (password !== confirmPassword) {
-      //lógica aqui (WIP)
+      setPasswordFieldMessage("As senhas não coincidem");
+      animateToPage(0);
+      return;
     }
 
     const requestData = {
@@ -134,6 +138,7 @@ export default function RegisterScreen() {
               setValueFunction={setPassword}
               isPassword={true}
               style={{ marginTop: 30 }}
+              warningMessage={passwordFieldMessage}
             />
             <FloatingLabelInput
               label="Confirmar Senha"
@@ -142,6 +147,7 @@ export default function RegisterScreen() {
               setValueFunction={setConfPassword}
               isPassword={true}
               style={{ marginTop: 30 }}
+              warningMessage={passwordFieldMessage}
             />
             <CrassusButton
               text="Continuar"
