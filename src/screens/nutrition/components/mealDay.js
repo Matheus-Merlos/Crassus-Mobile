@@ -1,19 +1,23 @@
-import { View, Text, StyleSheet, Dimensions } from "react-native";
+import { View, Text, StyleSheet, Dimensions, FlatList } from "react-native";
 import MealItem from "./mealItem";
 import * as colors from "../../../constants/colors";
 
-export default function MealDay({ date, meals }) {
+export default function MealDay({ date, meals = [] }) {
   return (
     <View style={styles.mealDay}>
       <Text style={styles.mealDate}>{date}</Text>
-      {meals.map((meal, index) => (
-        <MealItem
-          key={index}
-          name={meal.name}
-          calories={meal.calories}
-          iconIndex="ALMOCO"
-        />
-      ))}
+      <FlatList
+        data={meals}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={({ item, index }) => (
+          <MealItem
+            key={index}
+            name={item.name}
+            calories={item.calories}
+            iconIndex="ALMOCO"
+          />
+        )}
+      />
     </View>
   );
 }

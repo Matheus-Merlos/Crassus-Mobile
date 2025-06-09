@@ -15,9 +15,12 @@ import ConfirmIcon from "../../../assets/icons/confirmIcon";
 import { useNavigation } from "@react-navigation/native";
 import * as screens from "../../constants/screens";
 import { useAtom } from "jotai";
-import { mealFoodListAtom } from "../../jotai/store";
+import { mealFoodListAtom, isLoadingAtom } from "../../jotai/store";
+import { idAtom } from "../../jotai/asyncStore";
 import { useMemo } from "react";
 import BackButton from "../../components/backButton";
+import axios from "../../utils/axios";
+import Toast from "react-native-toast-message";
 
 export default function AddMealScreen({ title = "Almoço 1", onEdit }) {
   function sumObjectKey(list, key) {
@@ -34,6 +37,8 @@ export default function AddMealScreen({ title = "Almoço 1", onEdit }) {
   const navigation = useNavigation();
 
   const [mealFoodList, setMealFoodList] = useAtom(mealFoodListAtom);
+  const [, setIsLoading] = useAtom(isLoadingAtom);
+  const [userId] = useAtom(idAtom);
 
   const calories = useMemo(
     () => sumObjectKey(mealFoodList, "calories").toFixed(0),
@@ -62,6 +67,40 @@ export default function AddMealScreen({ title = "Almoço 1", onEdit }) {
     const newList = mealFoodList.filter((item, index) => index !== foodIndex);
 
     setMealFoodList(newList);
+  }
+
+  async function handleSubmit() {
+    if (mealFoodList.length === 0) {
+      return;
+    }
+
+    setIsLoading(true);
+    const requestFoodList = mealFoodList.map((food) => {
+      return {
+        foodId: food.id,
+        grams: food.quantity,
+      };
+    });
+
+    const requestData = {
+      type: 1,
+      foods: requestFoodList,
+    };
+
+    try {
+      await axios.post(`meals/${userId}`, requestData);
+
+      Toast.show({
+        type: "success",
+        text1: "Refeição adicionada com sucesso",
+      });
+      setMealFoodList([]);
+      navigation.navigate(screens.NUTRITION);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (
@@ -115,7 +154,7 @@ export default function AddMealScreen({ title = "Almoço 1", onEdit }) {
           )}
           contentContainerStyle={styles.foodListContent}
         />
-        <TouchableOpacity style={styles.iconButton}>
+        <TouchableOpacity style={styles.iconButton} onPress={handleSubmit}>
           <ConfirmIcon />
         </TouchableOpacity>
         <CrassusButton
