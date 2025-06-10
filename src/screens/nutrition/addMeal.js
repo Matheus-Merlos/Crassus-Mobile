@@ -50,6 +50,7 @@ export default function AddMealScreen({ onEdit }) {
   const navigation = useNavigation();
 
   const [mealFoodList, setMealFoodList] = useAtom(mealFoodListAtom);
+  const [mealTypeToAdd] = useAtom(mealTypeToAddAtom);
   const [, setIsLoading] = useAtom(isLoadingAtom);
   const [userId] = useAtom(idAtom);
 
@@ -96,7 +97,7 @@ export default function AddMealScreen({ onEdit }) {
     });
 
     const requestData = {
-      type: 1,
+      type: mealTypeToAdd,
       foods: requestFoodList,
     };
 
