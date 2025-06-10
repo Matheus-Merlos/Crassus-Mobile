@@ -24,10 +24,10 @@ function EyeOff({ color, width, height }) {
   );
 }
 
-function AddButton({ width, height }) {
+function AddButton({ width, height, color = "#F22E52" }) {
   return (
     <Svg width={width} height={height} viewBox="0 0 125 125" fill="none">
-      <Circle cx="62.5" cy="62.5" r="62.5" fill="#F22E52" />
+      <Circle cx="62.5" cy="62.5" r="62.5" fill={color} />
       <Path
         d="M79.3255 66.12H67.2295V78.536H58.7815V66.12H46.6855V58.312H58.7815V45.896H67.2295V58.312H79.3255V66.12Z"
         fill="white"

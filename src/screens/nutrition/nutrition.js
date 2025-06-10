@@ -1,21 +1,31 @@
 import { useNavigation } from "@react-navigation/native";
-import { StyleSheet, Dimensions, View, FlatList } from "react-native";
+import { FlatList, StyleSheet, View } from "react-native";
 import * as colors from "../../constants/colors";
 import MealDay from "./components/mealDay";
-import CrassusButton from "../../components/crassusButton";
 import WhiteIshBackground from "../../components/whiteIshBackground";
-import * as screes from "../../constants/screens";
+import * as screens from "../../constants/screens";
 import { useEffect, useState } from "react";
 import { useAtom } from "jotai";
-import { isLoadingAtom } from "../../jotai/store";
+import { isLoadingAtom, mealTypeToAddAtom } from "../../jotai/store";
 import axios from "../../utils/axios";
 import { idAtom } from "../../jotai/asyncStore";
+import { FAB } from "react-native-paper";
+import {
+  AddButtonSVG,
+  CupSVG,
+  DinnerSVG,
+  LunchSVG,
+  SnackSVG,
+} from "../../constants/svgs";
 
 export default function NutritionScreen() {
   const navigation = useNavigation();
 
+  const [open, setOpen] = useState(false);
+
   const [meals, setMeals] = useState([]);
   const [, setIsLoading] = useAtom(isLoadingAtom);
+  const [, setMealTypeToAdd] = useAtom(mealTypeToAddAtom);
   const [userId] = useAtom(idAtom);
 
   useEffect(() => {
@@ -35,9 +45,10 @@ export default function NutritionScreen() {
     if (userId) fetchMeals();
   }, [setIsLoading, userId]);
 
-  const handleNewMeal = () => {
-    navigation.navigate(screes.ADDMEAL);
-  };
+  function handleNewMeal(mealType) {
+    setMealTypeToAdd(mealType);
+    navigation.navigate(screens.ADDMEAL);
+  }
 
   return (
     <>
@@ -55,36 +66,74 @@ export default function NutritionScreen() {
           )}
         />
       </WhiteIshBackground>
-      <View style={styles.button}>
-        <CrassusButton
-          text="Nova refeição"
-          color={colors.BACKGROUND_YELLOW}
-          style={styles.addButton}
-          onPress={handleNewMeal}
-        />
-      </View>
+      <FAB.Group
+        open={open}
+        onStateChange={({ open }) => setOpen(open)}
+        icon={(props) => (
+          <View style={{ zIndex: 999 }}>
+            <AddButtonSVG
+              width={50}
+              height={50}
+              color={colors.BACKGROUND_YELLOW}
+            />
+          </View>
+        )}
+        actions={[
+          {
+            icon: (props) => (
+              <CupSVG color={colors.BACKGROUND_YELLOW} width={25} height={25} />
+            ),
+            label: "Café da Manhã",
+            onPress: () => handleNewMeal(1),
+          },
+          {
+            icon: (props) => (
+              <LunchSVG
+                color={colors.BACKGROUND_YELLOW}
+                width={25}
+                height={25}
+              />
+            ),
+            label: "Almoço",
+            onPress: () => handleNewMeal(2),
+          },
+          {
+            icon: (props) => (
+              <DinnerSVG
+                color={colors.BACKGROUND_YELLOW}
+                width={25}
+                height={25}
+              />
+            ),
+            label: "Janta",
+            onPress: () => handleNewMeal(3),
+          },
+          {
+            icon: (props) => (
+              <SnackSVG
+                color={colors.BACKGROUND_YELLOW}
+                width={25}
+                height={25}
+              />
+            ),
+            label: "Lanche",
+            onPress: () => handleNewMeal(4),
+          },
+        ]}
+        fabStyle={styles.fabButton}
+        style={styles.fab}
+        backdropColor="rgba(0,0,0,0.5)"
+      />
     </>
   );
 }
 
-const { width } = Dimensions.get("window");
-
 const styles = StyleSheet.create({
-  addButton: {
-    position: "absolute",
-    alignSelf: "center",
-    backgroundColor: "#fbbc05",
-    paddingVertical: 12,
-    paddingHorizontal: 30,
-    width: width * 0.6,
+  fabButton: {
+    width: 80,
+    height: 80,
   },
-  button: {
-    position: "absolute",
-    height: 150,
-    width,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: colors.WHITE_ISH,
+  fab: {
     bottom: 0,
   },
 });
