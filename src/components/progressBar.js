@@ -16,9 +16,10 @@ export default function ProgressBar({ label, current, total, color }) {
       textAlign: "center",
     },
     value: {
-      fontSize: 16,
+      fontSize: 14,
       fontFamily: "Poppins-SemiBold",
       textAlign: "center",
+      width: 120,
     },
     barBackground: {
       height: 8,

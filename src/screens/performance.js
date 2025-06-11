@@ -50,7 +50,7 @@ export default function PerformanceScreen() {
       <View style={styles.resume}>
         <View style={styles.resumeItem}>
           <Text style={styles.resumeItemTitle}>
-            {performance.consumedCalories}
+            {Number(performance.consumedCalories).toFixed(0)}
           </Text>
           <Text style={styles.resumeItemDescription}>Consumidas</Text>
         </View>
@@ -89,19 +89,19 @@ export default function PerformanceScreen() {
       <View style={styles.progressBars}>
         <ProgressBar
           label="Carboidratos"
-          current={performance.consumedCarbs}
-          total={performance.necessaryCarbs}
+          current={Number(performance.consumedCarbs).toFixed(2)}
+          total={Number(performance.necessaryCarbs).toFixed(2)}
           color={colors.BACKGROUND_YELLOW}
         />
         <ProgressBar
           label="Proteínas"
-          current={performance.consumedProteins}
+          current={Number(performance.consumedProteins).toFixed(2)}
           total={performance.necessaryProteins}
           color={colors.BACKGROUND_YELLOW}
         />
         <ProgressBar
           label="Gordura"
-          current={performance.consumedFats}
+          current={Number(performance.consumedFats).toFixed(2)}
           total={performance.necessaryFats}
           color={colors.BACKGROUND_YELLOW}
         />
