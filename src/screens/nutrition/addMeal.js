@@ -85,6 +85,9 @@ export default function AddMealScreen() {
   function handleGoBack() {
     //Limpa a lista para ela não ficar salva misteriosamente
     setMealFoodList([]);
+    setIsEditingMeal(false);
+    setMealIdToEdit(0);
+    setMealNameToEdit("");
     navigation.goBack();
   }
 
