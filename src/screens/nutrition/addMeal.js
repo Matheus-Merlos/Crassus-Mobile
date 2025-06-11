@@ -30,15 +30,6 @@ import Toast from "react-native-toast-message";
 import FloatingLabelInput from "../../components/floatingLabelInput";
 
 export default function AddMealScreen() {
-  function sumObjectKey(list, key) {
-    if (!list) return 0;
-
-    return list.reduce((total, item) => {
-      const value = Number(item[key]) || 0;
-      return total + value;
-    }, 0);
-  }
-
   const now = new Date();
 
   const [mealType] = useAtom(mealTypeToAddAtom);
@@ -67,22 +58,41 @@ export default function AddMealScreen() {
 
   const [mealTitle, setMealTitle] = useState(title);
 
-  const calories = useMemo(
-    () => sumObjectKey(mealFoodList, "calories").toFixed(0),
-    [mealFoodList],
-  );
-  const carbs = useMemo(
-    () => sumObjectKey(mealFoodList, "carbs").toFixed(2),
-    [mealFoodList],
-  );
-  const proteins = useMemo(
-    () => sumObjectKey(mealFoodList, "proteins").toFixed(2),
-    [mealFoodList],
-  );
-  const fats = useMemo(
-    () => sumObjectKey(mealFoodList, "fats").toFixed(2),
-    [mealFoodList],
-  );
+  const calories = useMemo(() => {
+    return mealFoodList
+      .reduce((total, food) => {
+        const quantity = Number(food.quantity) || 0;
+        return total + (food.calories * quantity) / 100;
+      }, 0)
+      .toFixed(0);
+  }, [mealFoodList]);
+
+  const carbs = useMemo(() => {
+    return mealFoodList
+      .reduce((total, food) => {
+        const quantity = Number(food.quantity) || 0;
+        return total + (food.carbs * quantity) / 100;
+      }, 0)
+      .toFixed(2);
+  }, [mealFoodList]);
+
+  const proteins = useMemo(() => {
+    return mealFoodList
+      .reduce((total, food) => {
+        const quantity = Number(food.quantity) || 0;
+        return total + (food.proteins * quantity) / 100;
+      }, 0)
+      .toFixed(2);
+  }, [mealFoodList]);
+
+  const fats = useMemo(() => {
+    return mealFoodList
+      .reduce((total, food) => {
+        const quantity = Number(food.quantity) || 0;
+        return total + (food.fats * quantity) / 100;
+      }, 0)
+      .toFixed(2);
+  }, [mealFoodList]);
 
   function handleGoBack() {
     //Limpa a lista para ela não ficar salva misteriosamente
@@ -109,7 +119,7 @@ export default function AddMealScreen() {
     const requestFoodList = mealFoodList.map((food) => {
       return {
         foodId: food.id,
-        grams: food.quantity,
+        grams: parseInt(food.quantity),
       };
     });
     const requestData = {
@@ -117,6 +127,8 @@ export default function AddMealScreen() {
       name: mealTitle,
       foods: requestFoodList,
     };
+
+    console.log(requestFoodList);
 
     try {
       if (!isEditingMeal) {
@@ -138,7 +150,7 @@ export default function AddMealScreen() {
         setMealNameToEdit("");
       }
     } catch (error) {
-      console.log(error);
+      console.log(error.response.data);
     } finally {
       setIsLoading(false);
     }
@@ -196,6 +208,7 @@ export default function AddMealScreen() {
               name={item.name}
               amount={`${item.quantity} gramas`}
               onDelete={() => handleFoodRemoval(index)}
+              listIndex={index}
             />
           )}
           contentContainerStyle={styles.foodListContent}

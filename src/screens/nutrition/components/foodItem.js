@@ -8,8 +8,22 @@ import {
 import { LunchSVG } from "../../../constants/svgs";
 import * as colors from "../../../constants/colors";
 import TrashIcon from "../../../../assets/icons/trashIcon";
+import FloatingLabelInput from "../../../components/floatingLabelInput";
+import { useAtom } from "jotai";
+import { mealFoodListAtom } from "../../../jotai/store";
 
-const FoodItem = ({ name, amount, onDelete }) => {
+const FoodItem = ({ name, amount, onDelete, listIndex }) => {
+  const [mealFoodList, setMealFoodList] = useAtom(mealFoodListAtom);
+
+  function handleEditQuantity(text) {
+    const numericText = text.replace(/[^0-9]/g, "");
+
+    const updatedList = [...mealFoodList];
+    const updatedFood = { ...updatedList[listIndex], quantity: numericText };
+
+    updatedList[listIndex] = updatedFood;
+    setMealFoodList(updatedList);
+  }
   return (
     <View style={styles.container}>
       <View style={styles.infoContainer}>
@@ -19,6 +33,14 @@ const FoodItem = ({ name, amount, onDelete }) => {
           <Text style={styles.amount}>{amount}</Text>
         </View>
       </View>
+      <FloatingLabelInput
+        label="Quantidade"
+        color={colors.BACKGROUND_RED}
+        value={mealFoodList[listIndex]?.quantity?.toString() || ""}
+        setValueFunction={handleEditQuantity}
+        smallTextFontSize={8}
+        width={50}
+      />
       <TouchableOpacity onPress={onDelete} style={styles.deleteButton}>
         <TrashIcon />
       </TouchableOpacity>
