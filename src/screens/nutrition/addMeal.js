@@ -15,14 +15,18 @@ import ConfirmIcon from "../../../assets/icons/confirmIcon";
 import { useNavigation } from "@react-navigation/native";
 import * as screens from "../../constants/screens";
 import { useAtom } from "jotai";
-import { mealFoodListAtom, isLoadingAtom } from "../../jotai/store";
+import {
+  mealFoodListAtom,
+  isLoadingAtom,
+  mealTypeToAddAtom,
+} from "../../jotai/store";
 import { idAtom } from "../../jotai/asyncStore";
 import { useMemo } from "react";
 import BackButton from "../../components/backButton";
 import axios from "../../utils/axios";
 import Toast from "react-native-toast-message";
 
-export default function AddMealScreen({ title = "Almoço 1", onEdit }) {
+export default function AddMealScreen({ onEdit }) {
   function sumObjectKey(list, key) {
     if (!list) return 0;
 
@@ -34,9 +38,19 @@ export default function AddMealScreen({ title = "Almoço 1", onEdit }) {
 
   const now = new Date();
 
+  const [mealType] = useAtom(mealTypeToAddAtom);
+  const mealTypes = {
+    1: "Café da Manhã",
+    2: "Almoço",
+    3: "Janta",
+    4: "Lanche",
+  };
+  const title = `${mealTypes[mealType]} ${now.getDate().toString().padStart(2, "0")}/${(now.getMonth() + 1).toString().padStart(2, "0")}`;
+
   const navigation = useNavigation();
 
   const [mealFoodList, setMealFoodList] = useAtom(mealFoodListAtom);
+  const [mealTypeToAdd] = useAtom(mealTypeToAddAtom);
   const [, setIsLoading] = useAtom(isLoadingAtom);
   const [userId] = useAtom(idAtom);
 
@@ -83,7 +97,7 @@ export default function AddMealScreen({ title = "Almoço 1", onEdit }) {
     });
 
     const requestData = {
-      type: 1,
+      type: mealTypeToAdd,
       foods: requestFoodList,
     };
 

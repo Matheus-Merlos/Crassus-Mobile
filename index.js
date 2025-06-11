@@ -2,11 +2,14 @@ import { registerRootComponent } from "expo";
 
 import App from "./App";
 import { Provider } from "jotai";
+import { Provider as PaperProvider } from "react-native-paper";
 
 function Root() {
   return (
     <Provider>
-      <App />
+      <PaperProvider>
+        <App />
+      </PaperProvider>
     </Provider>
   );
 }

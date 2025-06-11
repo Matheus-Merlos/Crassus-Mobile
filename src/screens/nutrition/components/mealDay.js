@@ -14,7 +14,7 @@ export default function MealDay({ date, meals = [] }) {
             key={index}
             name={item.name}
             calories={item.calories}
-            iconIndex="ALMOCO"
+            mealType={item.mealTypeId}
           />
         )}
       />
