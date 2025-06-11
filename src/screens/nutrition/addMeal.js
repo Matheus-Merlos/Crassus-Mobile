@@ -24,7 +24,7 @@ import {
   mealNameToEditAtom,
 } from "../../jotai/store";
 import { idAtom } from "../../jotai/asyncStore";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import BackButton from "../../components/backButton";
 import axios from "../../utils/axios";
 import Toast from "react-native-toast-message";
@@ -65,6 +65,8 @@ export default function AddMealScreen() {
       ? `${mealTypes[mealType]} ${now.getDate().toString().padStart(2, "0")}/${(now.getMonth() + 1).toString().padStart(2, "0")}`
       : mealNameToEdit;
 
+  const [mealTitle, setMealTitle] = useState(title);
+
   const calories = useMemo(
     () => sumObjectKey(mealFoodList, "calories").toFixed(0),
     [mealFoodList],
@@ -98,74 +100,50 @@ export default function AddMealScreen() {
   }
 
   async function handleSubmit() {
-    if (!isEditingMeal) {
-      if (mealFoodList.length === 0) {
-        return;
-      }
+    if (mealFoodList.length === 0) {
+      return;
+    }
 
-      setIsLoading(true);
-      const requestFoodList = mealFoodList.map((food) => {
-        return {
-          foodId: food.id,
-          grams: food.quantity,
-        };
-      });
+    setIsLoading(true);
 
-      const requestData = {
-        type: mealTypeToAdd,
-        foods: requestFoodList,
+    const requestFoodList = mealFoodList.map((food) => {
+      return {
+        foodId: food.id,
+        grams: food.quantity,
       };
+    });
+    const requestData = {
+      type: mealTypeToAdd,
+      name: mealTitle,
+      foods: requestFoodList,
+    };
 
-      try {
+    try {
+      if (!isEditingMeal) {
         await axios.post(`meals/${userId}`, requestData);
 
         Toast.show({
           type: "success",
           text1: "Refeição adicionada com sucesso",
         });
-        setMealFoodList([]);
-        navigation.navigate(screens.NUTRITION);
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setIsLoading(false);
-      }
-    } else {
-      if (mealFoodList.length === 0) {
-        return;
-      }
-
-      setIsLoading(true);
-      const requestFoodList = mealFoodList.map((food) => {
-        return {
-          foodId: food.id,
-          grams: food.quantity,
-        };
-      });
-
-      const requestData = {
-        type: mealTypeToAdd,
-        foods: requestFoodList,
-      };
-
-      try {
+      } else {
         await axios.patch(`meals/${userId}/${mealIdToEdit}`, requestData);
 
         Toast.show({
           type: "success",
           text1: "Refeição editada com sucesso",
         });
-        setMealFoodList([]);
         setIsEditingMeal(false);
         setMealIdToEdit(0);
         setMealNameToEdit("");
-        navigation.navigate(screens.NUTRITION);
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setIsLoading(false);
       }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
     }
+    setMealFoodList([]);
+    navigation.navigate(screens.NUTRITION);
   }
 
   return (
