@@ -12,6 +12,7 @@ export default function MealDay({ date, meals = [] }) {
         renderItem={({ item, index }) => (
           <MealItem
             key={index}
+            itemKey={item.id}
             name={item.name}
             calories={item.calories}
             mealType={item.mealTypeId}
