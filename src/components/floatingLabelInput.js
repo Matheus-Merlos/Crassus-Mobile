@@ -20,6 +20,7 @@ export default function FloatingLabelInput({
   isPassword = false,
   width = 350,
   warningMessage = "",
+  smallTextFontSize = 16,
 }) {
   const [isVisible, setIsVisible] = useState(isPassword);
 
@@ -52,7 +53,7 @@ export default function FloatingLabelInput({
     }),
     fontSize: floatingLabelAnimation.interpolate({
       inputRange: [0, 1],
-      outputRange: [18, 16],
+      outputRange: [18, smallTextFontSize],
     }),
   };
 
