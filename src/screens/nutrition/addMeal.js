@@ -8,7 +8,6 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import EditIcon from "../../../assets/icons/editIcon";
 import CrassusButton from "../../components/crassusButton";
 import FoodItem from "./components/foodItem";
 import ConfirmIcon from "../../../assets/icons/confirmIcon";
@@ -28,6 +27,7 @@ import { useMemo, useState } from "react";
 import BackButton from "../../components/backButton";
 import axios from "../../utils/axios";
 import Toast from "react-native-toast-message";
+import FloatingLabelInput from "../../components/floatingLabelInput";
 
 export default function AddMealScreen() {
   function sumObjectKey(list, key) {
@@ -162,10 +162,13 @@ export default function AddMealScreen() {
             </Text>
           </View>
           <View style={styles.titleAndEditRow}>
-            <Text style={styles.title}>{title}</Text>
-            <TouchableOpacity style={styles.editButton}>
-              <EditIcon color="#000" />
-            </TouchableOpacity>
+            <FloatingLabelInput
+              label="Nome da Refeição"
+              color={colors.BACKGROUND_RED}
+              value={mealTitle}
+              setValueFunction={setMealTitle}
+              style={{ marginTop: 15 }}
+            />
           </View>
           <Text style={styles.caloriesValue}>{calories}</Text>
           <Text style={styles.caloriesLabel}>Calorias</Text>
@@ -262,7 +265,7 @@ const styles = StyleSheet.create({
     color: "#000",
   },
   caloriesValue: {
-    marginTop: -25,
+    marginTop: -40,
     fontSize: 84,
     fontFamily: "Poppins-BlackItalic",
     color: "#000",
