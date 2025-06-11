@@ -8,7 +8,6 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import EditIcon from "../../../assets/icons/editIcon";
 import CrassusButton from "../../components/crassusButton";
 import FoodItem from "./components/foodItem";
 import ConfirmIcon from "../../../assets/icons/confirmIcon";
@@ -19,14 +18,18 @@ import {
   mealFoodListAtom,
   isLoadingAtom,
   mealTypeToAddAtom,
+  isEditingMealAtom,
+  mealIdToEditAtom,
+  mealNameToEditAtom,
 } from "../../jotai/store";
 import { idAtom } from "../../jotai/asyncStore";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import BackButton from "../../components/backButton";
 import axios from "../../utils/axios";
 import Toast from "react-native-toast-message";
+import FloatingLabelInput from "../../components/floatingLabelInput";
 
-export default function AddMealScreen({ onEdit }) {
+export default function AddMealScreen() {
   function sumObjectKey(list, key) {
     if (!list) return 0;
 
@@ -45,7 +48,6 @@ export default function AddMealScreen({ onEdit }) {
     3: "Janta",
     4: "Lanche",
   };
-  const title = `${mealTypes[mealType]} ${now.getDate().toString().padStart(2, "0")}/${(now.getMonth() + 1).toString().padStart(2, "0")}`;
 
   const navigation = useNavigation();
 
@@ -53,6 +55,17 @@ export default function AddMealScreen({ onEdit }) {
   const [mealTypeToAdd] = useAtom(mealTypeToAddAtom);
   const [, setIsLoading] = useAtom(isLoadingAtom);
   const [userId] = useAtom(idAtom);
+
+  const [isEditingMeal, setIsEditingMeal] = useAtom(isEditingMealAtom);
+  const [mealIdToEdit, setMealIdToEdit] = useAtom(mealIdToEditAtom);
+  const [mealNameToEdit, setMealNameToEdit] = useAtom(mealNameToEditAtom);
+
+  const title =
+    isEditingMeal === false
+      ? `${mealTypes[mealType]} ${now.getDate().toString().padStart(2, "0")}/${(now.getMonth() + 1).toString().padStart(2, "0")}`
+      : mealNameToEdit;
+
+  const [mealTitle, setMealTitle] = useState(title);
 
   const calories = useMemo(
     () => sumObjectKey(mealFoodList, "calories").toFixed(0),
@@ -74,6 +87,9 @@ export default function AddMealScreen({ onEdit }) {
   function handleGoBack() {
     //Limpa a lista para ela não ficar salva misteriosamente
     setMealFoodList([]);
+    setIsEditingMeal(false);
+    setMealIdToEdit(0);
+    setMealNameToEdit("");
     navigation.goBack();
   }
 
@@ -89,32 +105,45 @@ export default function AddMealScreen({ onEdit }) {
     }
 
     setIsLoading(true);
+
     const requestFoodList = mealFoodList.map((food) => {
       return {
         foodId: food.id,
         grams: food.quantity,
       };
     });
-
     const requestData = {
       type: mealTypeToAdd,
+      name: mealTitle,
       foods: requestFoodList,
     };
 
     try {
-      await axios.post(`meals/${userId}`, requestData);
+      if (!isEditingMeal) {
+        await axios.post(`meals/${userId}`, requestData);
 
-      Toast.show({
-        type: "success",
-        text1: "Refeição adicionada com sucesso",
-      });
-      setMealFoodList([]);
-      navigation.navigate(screens.NUTRITION);
+        Toast.show({
+          type: "success",
+          text1: "Refeição adicionada com sucesso",
+        });
+      } else {
+        await axios.patch(`meals/${userId}/${mealIdToEdit}`, requestData);
+
+        Toast.show({
+          type: "success",
+          text1: "Refeição editada com sucesso",
+        });
+        setIsEditingMeal(false);
+        setMealIdToEdit(0);
+        setMealNameToEdit("");
+      }
     } catch (error) {
       console.log(error);
     } finally {
       setIsLoading(false);
     }
+    setMealFoodList([]);
+    navigation.navigate(screens.NUTRITION);
   }
 
   return (
@@ -133,10 +162,13 @@ export default function AddMealScreen({ onEdit }) {
             </Text>
           </View>
           <View style={styles.titleAndEditRow}>
-            <Text style={styles.title}>{title}</Text>
-            <TouchableOpacity onPress={onEdit} style={styles.editButton}>
-              <EditIcon color="#000" />
-            </TouchableOpacity>
+            <FloatingLabelInput
+              label="Nome da Refeição"
+              color={colors.BACKGROUND_RED}
+              value={mealTitle}
+              setValueFunction={setMealTitle}
+              style={{ marginTop: 15 }}
+            />
           </View>
           <Text style={styles.caloriesValue}>{calories}</Text>
           <Text style={styles.caloriesLabel}>Calorias</Text>
@@ -233,7 +265,7 @@ const styles = StyleSheet.create({
     color: "#000",
   },
   caloriesValue: {
-    marginTop: -25,
+    marginTop: -40,
     fontSize: 84,
     fontFamily: "Poppins-BlackItalic",
     color: "#000",
