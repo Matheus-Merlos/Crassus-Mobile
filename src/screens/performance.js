@@ -11,44 +11,35 @@ import {
   LunchSVG,
   SnackSVG,
 } from "../constants/svgs";
+import { useState } from "react";
+import { useAtom } from "jotai";
+import { isLoadingAtom } from "../jotai/store";
+import { idAtom } from "../jotai/asyncStore";
+import axios from "../utils/axios";
 
 export default function PerformanceScreen() {
-  const mockData = {
-    totalCalories: 2238,
-    consumedCalories: 1541,
-    missingCalories: 697,
-    burntCalories: 561,
+  const [performance, setPerformance] = useState({});
 
-    proteins: {
-      necessary: 103,
-      eaten: 35,
-    },
-    carbs: {
-      necessary: 258,
-      eaten: 206,
-    },
-    fats: {
-      necessary: 68,
-      eaten: 32,
-    },
+  const [, setIsLoading] = useAtom(isLoadingAtom);
+  const [userId] = useAtom(idAtom);
 
-    breakfast: {
-      necessary: 700,
-      eaten: 56,
-    },
-    lunch: {
-      necessary: 819,
-      eaten: 856,
-    },
-    dinner: {
-      necessary: 540,
-      eaten: 379,
-    },
-    lunches: {
-      necessary: 126,
-      eaten: 0,
-    },
-  };
+  useState(() => {
+    async function fetchPerformance() {
+      try {
+        setIsLoading(true);
+        const response = await axios.get(`performance/${userId}`);
+
+        setPerformance(response.data);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    if (userId) fetchPerformance();
+  }, [userId]);
+
   return (
     <WhiteIshBackground
       title="Hoje"
@@ -59,7 +50,7 @@ export default function PerformanceScreen() {
       <View style={styles.resume}>
         <View style={styles.resumeItem}>
           <Text style={styles.resumeItemTitle}>
-            {mockData.consumedCalories}
+            {performance.consumedCalories}
           </Text>
           <Text style={styles.resumeItemDescription}>Consumidas</Text>
         </View>
@@ -67,8 +58,10 @@ export default function PerformanceScreen() {
           size={150}
           width={5}
           fill={
-            (mockData.totalCalories /
-              (mockData.totalCalories + mockData.missingCalories)) *
+            (performance.necessaryCalories /
+              (performance.necessaryCalories +
+                (performance.necessaryCalories -
+                  performance.consumedCalories))) *
             100
           }
           tintColor="#F50057"
@@ -78,7 +71,10 @@ export default function PerformanceScreen() {
             return (
               <>
                 <Text style={styles.kcalGraphNumber}>
-                  {mockData.missingCalories}
+                  {parseInt(
+                    performance.necessaryCalories -
+                      performance.consumedCalories,
+                  )}
                 </Text>
                 <Text style={styles.kcalDescribe}>KCal Restante</Text>
               </>
@@ -86,27 +82,27 @@ export default function PerformanceScreen() {
           }}
         </AnimatedCircularProgress>
         <View style={styles.resumeItem}>
-          <Text style={styles.resumeItemTitle}>{mockData.burntCalories}</Text>
+          <Text style={styles.resumeItemTitle}>861</Text>
           <Text style={styles.resumeItemDescription}>Gastas</Text>
         </View>
       </View>
       <View style={styles.progressBars}>
         <ProgressBar
           label="Carboidratos"
-          current={mockData.carbs.eaten}
-          total={mockData.carbs.necessary}
+          current={performance.consumedCarbs}
+          total={performance.necessaryCarbs}
           color={colors.BACKGROUND_YELLOW}
         />
         <ProgressBar
           label="Proteínas"
-          current={mockData.proteins.eaten}
-          total={mockData.proteins.necessary}
+          current={performance.consumedProteins}
+          total={performance.necessaryProteins}
           color={colors.BACKGROUND_YELLOW}
         />
         <ProgressBar
           label="Gordura"
-          current={mockData.fats.eaten}
-          total={mockData.fats.necessary}
+          current={performance.consumedFats}
+          total={performance.necessaryFats}
           color={colors.BACKGROUND_YELLOW}
         />
       </View>
@@ -114,8 +110,8 @@ export default function PerformanceScreen() {
         <CupSVG color={colors.BACKGROUND_YELLOW} width={45} height={45} />
         <KCalProgressBar
           label="Café da Manhã"
-          current={mockData.breakfast.eaten}
-          total={mockData.breakfast.necessary}
+          current={performance.consumedCaloriesBreakfast}
+          total={performance.necessaryCaloriesBreakfast}
           color={colors.BACKGROUND_YELLOW}
         />
         <AddButtonSVG width={50} height={50} />
@@ -125,8 +121,8 @@ export default function PerformanceScreen() {
         <LunchSVG color={colors.BACKGROUND_YELLOW} width={45} height={45} />
         <KCalProgressBar
           label="Almoço"
-          current={mockData.lunch.eaten}
-          total={mockData.lunch.necessary}
+          current={performance.consumedCaloriesLunch}
+          total={performance.necessaryCaloriesLunch}
           color={colors.BACKGROUND_YELLOW}
         />
         <AddButtonSVG width={50} height={50} />
@@ -136,8 +132,8 @@ export default function PerformanceScreen() {
         <DinnerSVG color={colors.BACKGROUND_YELLOW} width={45} height={45} />
         <KCalProgressBar
           label="Jantar"
-          current={mockData.dinner.eaten}
-          total={mockData.dinner.necessary}
+          current={performance.consumedCaloriesDinner}
+          total={performance.necessaryCaloriesDinner}
           color={colors.BACKGROUND_YELLOW}
         />
         <AddButtonSVG width={50} height={50} />
@@ -147,8 +143,8 @@ export default function PerformanceScreen() {
         <SnackSVG color={colors.BACKGROUND_YELLOW} width={45} height={45} />
         <KCalProgressBar
           label="Lanches"
-          current={mockData.lunches.eaten}
-          total={mockData.lunches.necessary}
+          current={performance.consumedCaloriesSnacks}
+          total={performance.necessaryCaloriesSnacks}
           color={colors.BACKGROUND_YELLOW}
         />
         <AddButtonSVG width={50} height={50} />
