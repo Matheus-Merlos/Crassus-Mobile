@@ -11,7 +11,7 @@ import {
   LunchSVG,
   SnackSVG,
 } from "../constants/svgs";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAtom } from "jotai";
 import { isLoadingAtom } from "../jotai/store";
 import { idAtom } from "../jotai/asyncStore";
@@ -23,7 +23,7 @@ export default function PerformanceScreen() {
   const [, setIsLoading] = useAtom(isLoadingAtom);
   const [userId] = useAtom(idAtom);
 
-  useState(() => {
+  useEffect(() => {
     async function fetchPerformance() {
       try {
         setIsLoading(true);
@@ -31,14 +31,14 @@ export default function PerformanceScreen() {
 
         setPerformance(response.data);
       } catch (error) {
-        console.log(error);
+        console.log(error.response.data);
       } finally {
         setIsLoading(false);
       }
     }
 
     if (userId) fetchPerformance();
-  }, [userId]);
+  }, [userId, setIsLoading]);
 
   return (
     <WhiteIshBackground

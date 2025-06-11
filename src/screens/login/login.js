@@ -55,6 +55,7 @@ export default function LoginScreen() {
     try {
       request = await axios.post("login", requestData);
     } catch (error) {
+      console.log(error);
       const message = error.response.data.message;
       if (message[0].includes("email")) {
         setEmailFieldMessage("Forneça um e-mail válido");
