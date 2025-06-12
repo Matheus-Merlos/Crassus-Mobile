@@ -128,8 +128,6 @@ export default function AddMealScreen() {
       foods: requestFoodList,
     };
 
-    console.log(requestFoodList);
-
     try {
       if (!isEditingMeal) {
         await axios.post(`meals/${userId}`, requestData);

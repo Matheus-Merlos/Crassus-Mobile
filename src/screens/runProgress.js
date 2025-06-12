@@ -21,7 +21,7 @@ export default function RunProgressScreen() {
   const navigation = useNavigation();
 
   const [hasPermission, setHasPermission] = useState(false);
-  const [path, setPath] = useState([]); }
+  const [path, setPath] = useState([]);
   const [watcher, setWatcher] = useState(null);
   const [distanceMeters, setDistanceMeters] = useState(0);
   const [startTime, setStartTime] = useState(null);
@@ -40,12 +40,12 @@ export default function RunProgressScreen() {
     });
   };
 
-  const startLocationUpdates = async () => {
+  async function startLocationUpdates() {
     const { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== "granted") {
       Alert.alert(
         "Permissão necessária",
-        "Precisamos de acesso à sua localização para registrar a corrida."
+        "Precisamos de acesso à sua localização para registrar a corrida.",
       );
       return;
     }
@@ -70,7 +70,7 @@ export default function RunProgressScreen() {
             const last = prevPath[prevPath.length - 1];
             const delta = haversine(
               { lat: last.latitude, lon: last.longitude },
-              { lat: latitude, lon: longitude }
+              { lat: latitude, lon: longitude },
             );
             setDistanceMeters((d) => d + delta);
           }
@@ -85,7 +85,7 @@ export default function RunProgressScreen() {
             center: { latitude, longitude },
           });
         }
-      }
+      },
     );
     setWatcher(locWatcher);
 
@@ -95,7 +95,7 @@ export default function RunProgressScreen() {
         locWatcher.remove();
       }
     };
-  };
+  }
 
   useEffect(() => {
     let cleanupTimer;
@@ -123,12 +123,13 @@ export default function RunProgressScreen() {
     const m = Math.floor(paceSec / 60)
       .toString()
       .padStart(2, "0");
-    const s = Math.floor(paceSec % 60).toString().padStart(2, "0");
+    const s = Math.floor(paceSec % 60)
+      .toString()
+      .padStart(2, "0");
     return `${m}’${s}”`;
   };
   const formattedPace = formatPace(pacePerKm);
 
-)
   const caloriesBurned = Math.floor(distanceKm * 60);
 
   return (
