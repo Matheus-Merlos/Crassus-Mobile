@@ -4,69 +4,141 @@ import {
   Dimensions,
   View,
   Text,
-  Image,
   ScrollView,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
+import MapView, { Marker, Polyline } from "react-native-maps";
 import * as colors from "../constants/colors";
 import RunIcon from "../../assets/icons/runIcon";
 
 const { width, height } = Dimensions.get("window");
+const MAP_HEIGHT = height * 0.40;
 
-export default function RunFinishedScreen() {
-  const data = {
-    title: "Corrida 98",
-    datetime: "Hoje - 9:51 AM",
-    distance: 2.41,
-    pace: "8’21”",
-    time: "9:31",
-    calories: 221,
-    elevation: "721m",
-    bpmMax: 157,
+export default function RunFinishedScreen({ route, navigation }) {
+  const {
+    title = "Minha Corrida",
+    datetime = "—",
+    totalDistance = 0,
+    totalTime = 0,
+    pace = "--’--”",
+    calories = 0,
+    elevation = "—",
+    bpmMax = "—",
+    path = [],
+  } = route.params ?? {};
+
+  const formattedDistance = totalDistance.toFixed(2);
+
+  const formatTime = (secs) => {
+    const mm = Math.floor(secs / 60).toString().padStart(2, "0");
+    const ss = (secs % 60).toString().padStart(2, "0");
+    return `${mm}:${ss}`;
   };
+  const formattedTime = formatTime(totalTime);
+
+  const startPoint = path.length > 0 ? path[0] : null;
+  const endPoint = path.length > 1 ? path[path.length - 1] : null;
+
+  const initialRegion =
+    path.length > 0
+      ? {
+          latitude: path[0].latitude,
+          longitude: path[0].longitude,
+          latitudeDelta: 0.01,
+          longitudeDelta: 0.01,
+        }
+      : {
+          // Região padrão (SP) se não tiver path
+          latitude: -23.55052,
+          longitude: -46.633308,
+          latitudeDelta: 0.05,
+          longitudeDelta: 0.05,
+        };
 
   return (
     <View style={styles.container}>
-      {/* Gradiente topo */}
+      {}
       <LinearGradient
         colors={[colors.BACKGROUND_RED, colors.BACKGROUND_YELLOW]}
         start={{ x: 1, y: 0 }}
         end={{ x: 0, y: 0 }}
-        style={styles.gradient}
+        style={StyleSheet.absoluteFill}
       />
 
-      {/* <ScrollView contentContainerStyle={{ paddingBottom: 220 }}> */}
-      <Text style={styles.datetime}>{data.datetime}</Text>
-
-      <View style={styles.titleRow}>
-        <Text style={styles.title}>{data.title}</Text>
-        <View style={styles.iconFrame}>
-          <RunIcon size={48} color="#000" />
+      {}
+      <ScrollView
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
+        {}
+        <Text style={styles.datetime}>{datetime}</Text>
+        <View style={styles.titleRow}>
+          <Text style={styles.title}>{title}</Text>
+          <View style={styles.iconFrame}>
+            <RunIcon size={40} color="#000" />
+          </View>
         </View>
-      </View>
 
-      <View style={styles.whiteCard}>
-        <Text style={styles.distance}>{data.distance.toFixed(2)}</Text>
-        <Text style={styles.distanceLabel}>Quilômetros</Text>
+        {}
+        <View style={styles.distanceBlock}>
+          <Text style={styles.distance}>{formattedDistance}</Text>
+          <Text style={styles.distanceLabel}>Quilômetros</Text>
+        </View>
 
+        {}
         <View style={styles.metricsRow}>
-          <Metric label="Pace Médio" value={data.pace} />
-          <Metric label="Tempo" value={data.time} />
-          <Metric label="Calorias" value={data.calories.toString()} />
+          <Metric label="Pace Médio" value={pace} />
+          <Metric label="Tempo" value={formattedTime} />
+          <Metric label="Calorias" value={calories.toString()} />
         </View>
-
         <View style={styles.metricsRow}>
-          <Metric label="Elevação" value={data.elevation} />
-          <Metric label="BPM Máximo" value={data.bpmMax.toString()} />
+          <Metric label="Elevação" value={elevation.toString()} />
+          <Metric label="BPM Máximo" value={bpmMax.toString()} />
         </View>
-      </View>
 
-      <Image
-        source={require("../../assets/mockMap.png")}
-        style={styles.mapImage}
-        resizeMode="cover"
-      />
-      {/* </ScrollView> */}
+        {}
+        <View style={{ height: MAP_HEIGHT * 0.3 }} />
+      </ScrollView>
+
+      {}
+      <View style={styles.mapContainer}>
+        <MapView
+          style={styles.map}
+          initialRegion={initialRegion}
+          loadingEnabled={true}
+        >
+          <Polyline
+            coordinates={path.map((p) => ({
+              latitude: p.latitude,
+              longitude: p.longitude,
+            }))}
+            strokeWidth={4}
+            strokeColor="#FF0000"
+          />
+
+          {startPoint && (
+            <Marker
+              coordinate={{
+                latitude: startPoint.latitude,
+                longitude: startPoint.longitude,
+              }}
+              title="Início"
+              pinColor="green"
+            />
+          )}
+
+          {endPoint && (
+            <Marker
+              coordinate={{
+                latitude: endPoint.latitude,
+                longitude: endPoint.longitude,
+              }}
+              title="Fim"
+              pinColor="red"
+            />
+          )}
+        </MapView>
+      </View>
     </View>
   );
 }
@@ -83,23 +155,24 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.WHITE,
   },
-  gradient: {
-    position: "absolute",
-    width,
-    height,
+
+
+  scrollContent: {
+    paddingTop: 48,
+    paddingHorizontal: 24,
+    paddingBottom: MAP_HEIGHT,
   },
+
   datetime: {
     fontFamily: "Poppins-Regular",
     fontSize: 16,
     color: "rgba(0,0,0,0.5)",
-    marginTop: 32,
-    marginLeft: 24,
+    marginBottom: 4,
   },
   titleRow: {
     flexDirection: "row",
     alignItems: "center",
-    marginHorizontal: 24,
-    marginTop: 4,
+    marginBottom: 24,
   },
   title: {
     flex: 1,
@@ -108,39 +181,33 @@ const styles = StyleSheet.create({
     color: "rgba(0,0,0,0.9)",
   },
   iconFrame: {
-    width: 60,
-    height: 60,
+    width: 48,
+    height: 48,
     borderRadius: 12,
     backgroundColor: colors.WHITE,
     alignItems: "center",
     justifyContent: "center",
   },
-  whiteCard: {
-    backgroundColor: colors.WHITE_ISH,
-    borderTopLeftRadius: 60,
-    borderTopRightRadius: 60,
-    paddingTop: 40,
-    paddingBottom: 24,
-    paddingHorizontal: 24,
-    marginTop: 32,
+
+  distanceBlock: {
+    alignItems: "center",
+    marginBottom: 24,
   },
   distance: {
     fontFamily: "Poppins-BlackItalic",
     fontSize: 64,
-    textAlign: "center",
     color: "#000",
   },
   distanceLabel: {
     fontFamily: "Poppins-Regular",
     fontSize: 20,
-    textAlign: "center",
-    color: "rgba(0,0,0,0.5)",
-    marginBottom: 24,
+    color: "rgba(0,0,0,0.6)",
   },
+
   metricsRow: {
     flexDirection: "row",
     justifyContent: "space-around",
-    marginBottom: 24,
+    marginBottom: 16,
   },
   metricBlock: {
     alignItems: "center",
@@ -148,19 +215,26 @@ const styles = StyleSheet.create({
   },
   metricValue: {
     fontFamily: "Poppins-SemiBold",
-    fontSize: 28,
+    fontSize: 24,
     color: "#000",
   },
   metricLabel: {
     fontFamily: "Poppins-Regular",
-    fontSize: 14,
+    fontSize: 12,
     color: "rgba(0,0,0,0.5)",
     marginTop: 4,
     textAlign: "center",
   },
-  mapImage: {
-    width,
-    height: height * 0.35,
-    marginTop: 16,
+
+
+  mapContainer: {
+    position: "absolute",
+    bottom: 0,
+    width: width,
+    height: MAP_HEIGHT,
+    backgroundColor: colors.WHITE,
+  },
+  map: {
+    flex: 1,
   },
 });
