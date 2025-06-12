@@ -62,13 +62,6 @@ export default function MoreScreen() {
         </View>
         <ArrowSVG color={colors.BACKGROUND_YELLOW} width={50} height={50} />
       </TouchableOpacity>
-      <TouchableOpacity style={styles.option}>
-        <View style={styles.optionTextIcon}>
-          <GearSVG color={colors.BACKGROUND_YELLOW} width={50} height={50} />
-          <Text style={styles.optionText}>Configurações</Text>
-        </View>
-        <ArrowSVG color={colors.BACKGROUND_YELLOW} width={50} height={50} />
-      </TouchableOpacity>
       <TouchableOpacity style={styles.option} onPress={handleDisconnect}>
         <View style={styles.optionTextIcon}>
           <DisconnectIconSVG
