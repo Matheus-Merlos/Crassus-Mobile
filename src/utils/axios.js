@@ -2,7 +2,7 @@ import axiosClient from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const axios = axiosClient.create({
-  baseURL: "https://api.test.crassus.app.br/",
+  baseURL: "https://api.crassus.app.br/",
 });
 
 axios.interceptors.request.use(

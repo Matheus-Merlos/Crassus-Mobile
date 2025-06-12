@@ -14,7 +14,7 @@ import RunIcon from "../../assets/icons/runIcon";
 const { width, height } = Dimensions.get("window");
 const MAP_HEIGHT = height * 0.40;
 
-export default function RunFinishedScreen({ route, navigation }) {
+export default function RunFinishedScreen({ route }) {
   const {
     title = "Minha Corrida",
     datetime = "—",
@@ -48,7 +48,6 @@ export default function RunFinishedScreen({ route, navigation }) {
           longitudeDelta: 0.01,
         }
       : {
-          // Região padrão (SP) se não tiver path
           latitude: -23.55052,
           longitude: -46.633308,
           latitudeDelta: 0.05,
@@ -57,20 +56,15 @@ export default function RunFinishedScreen({ route, navigation }) {
 
   return (
     <View style={styles.container}>
-      {}
       <LinearGradient
         colors={[colors.BACKGROUND_RED, colors.BACKGROUND_YELLOW]}
-        start={{ x: 1, y: 0 }}
-        end={{ x: 0, y: 0 }}
         style={StyleSheet.absoluteFill}
       />
 
-      {}
       <ScrollView
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        {}
         <Text style={styles.datetime}>{datetime}</Text>
         <View style={styles.titleRow}>
           <Text style={styles.title}>{title}</Text>
@@ -79,13 +73,11 @@ export default function RunFinishedScreen({ route, navigation }) {
           </View>
         </View>
 
-        {}
         <View style={styles.distanceBlock}>
           <Text style={styles.distance}>{formattedDistance}</Text>
           <Text style={styles.distanceLabel}>Quilômetros</Text>
         </View>
 
-        {}
         <View style={styles.metricsRow}>
           <Metric label="Pace Médio" value={pace} />
           <Metric label="Tempo" value={formattedTime} />
@@ -96,16 +88,14 @@ export default function RunFinishedScreen({ route, navigation }) {
           <Metric label="BPM Máximo" value={bpmMax.toString()} />
         </View>
 
-        {}
         <View style={{ height: MAP_HEIGHT * 0.3 }} />
       </ScrollView>
 
-      {}
       <View style={styles.mapContainer}>
         <MapView
           style={styles.map}
           initialRegion={initialRegion}
-          loadingEnabled={true}
+          loadingEnabled
         >
           <Polyline
             coordinates={path.map((p) => ({
@@ -126,7 +116,6 @@ export default function RunFinishedScreen({ route, navigation }) {
               pinColor="green"
             />
           )}
-
           {endPoint && (
             <Marker
               coordinate={{
@@ -151,29 +140,19 @@ const Metric = ({ label, value }) => (
 );
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.WHITE,
-  },
-
-
+  container: { flex: 1, backgroundColor: colors.WHITE },
   scrollContent: {
     paddingTop: 48,
     paddingHorizontal: 24,
     paddingBottom: MAP_HEIGHT,
   },
-
   datetime: {
     fontFamily: "Poppins-Regular",
     fontSize: 16,
     color: "rgba(0,0,0,0.5)",
     marginBottom: 4,
   },
-  titleRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 24,
-  },
+  titleRow: { flexDirection: "row", alignItems: "center", marginBottom: 24 },
   title: {
     flex: 1,
     fontFamily: "Poppins-SemiBold",
@@ -188,11 +167,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-
-  distanceBlock: {
-    alignItems: "center",
-    marginBottom: 24,
-  },
+  distanceBlock: { alignItems: "center", marginBottom: 24 },
   distance: {
     fontFamily: "Poppins-BlackItalic",
     fontSize: 64,
@@ -203,16 +178,12 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: "rgba(0,0,0,0.6)",
   },
-
   metricsRow: {
     flexDirection: "row",
     justifyContent: "space-around",
     marginBottom: 16,
   },
-  metricBlock: {
-    alignItems: "center",
-    flex: 1,
-  },
+  metricBlock: { alignItems: "center", flex: 1 },
   metricValue: {
     fontFamily: "Poppins-SemiBold",
     fontSize: 24,
@@ -225,16 +196,12 @@ const styles = StyleSheet.create({
     marginTop: 4,
     textAlign: "center",
   },
-
-
   mapContainer: {
     position: "absolute",
     bottom: 0,
-    width: width,
+    width,
     height: MAP_HEIGHT,
     backgroundColor: colors.WHITE,
   },
-  map: {
-    flex: 1,
-  },
+  map: { flex: 1 },
 });

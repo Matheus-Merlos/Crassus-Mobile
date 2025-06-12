@@ -1,16 +1,16 @@
-// src/screens/race.js — Tela "Suas Corridas" usando constantes de cor
 import { useNavigation } from "@react-navigation/native";
 import { StyleSheet, Dimensions, View, Text } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { useEffect, useState } from "react";
+import { useAtom } from "jotai";
+import { isLoadingAtom, mealTypeToAddAtom } from "../jotai/store";
+import { idAtom } from "../jotai/asyncStore";
 import * as colors from "../constants/colors";
-
+import axios from "../utils/axios";
 import CrassusButton from "../components/crassusButton";
 import WhiteIshBackground from "../components/whiteIshBackground";
 import RunIcon from "../../assets/icons/runIcon";
 
-// ────────────────────────────────────────────────────────────────────────────────
-// Componentes auxiliares
-// ────────────────────────────────────────────────────────────────────────────────
 
 const IconFrame = () => (
   <View style={styles.iconFrame}>
@@ -18,13 +18,13 @@ const IconFrame = () => (
   </View>
 );
 
-const RunCard = ({ name, distance }) => (
+const RunCard = ({ name, distance = 0 }) => (
   <View style={styles.cardContainer}>
     <IconFrame />
     <View style={styles.cardTextArea}>
       <Text style={styles.cardTitle}>{name}</Text>
       <Text style={styles.cardSubtitle}>
-        {distance.toString().replace(".", ",")} km percorridos
+        {distance.toFixed(2).replace(".", ",")} km percorridos
       </Text>
     </View>
     <MaterialCommunityIcons
@@ -35,40 +35,80 @@ const RunCard = ({ name, distance }) => (
   </View>
 );
 
+
 const MonthSection = ({ month, runs }) => (
-  <View style={styles.monthSection}>
-    <Text style={styles.monthLabel}>{month}</Text>
-    {runs.map((run) => (
-      <RunCard key={run.name} name={run.name} distance={run.distance} />
-    ))}
-  </View>
-);
+   <View style={styles.monthSection}>
+     <Text style={styles.monthLabel}>{month}</Text>
+     {runs.map((run, idx) => (
+       <RunCard
+         key={`${month}-${idx}`}
+         name={run.name}
+         distance={run.distance}
+       />
+     ))}
+   </View>
+ );
+
 
 export default function RaceScreen() {
   const navigation = useNavigation();
+  const [runs, setRuns] = useState([]);
+  const [, setIsLoading] = useAtom(isLoadingAtom);
+  const [userId] = useAtom(idAtom);
 
-  const mockHistory = [
-    {
-      month: "Abril",
-      runs: [{ name: "Corrida 97", distance: 5.41 }],
-    },
-    {
-      month: "Março",
-      runs: [
-        { name: "Corrida 96", distance: 2.69 },
-        { name: "Corrida 95", distance: 2.69 },
-        { name: "Corrida 94", distance: 3.71 },
-        { name: "Corrida 93", distance: 4.65 },
-        { name: "Corrida 92", distance: 4.29 },
-        { name: "Corrida 91", distance: 4.29 },
-        { name: "Corrida 90", distance: 4.29 },
-      ],
-    },
-  ];
+  useEffect(() => {
+    async function fetchRuns() {
+      setIsLoading(true);
+      try {
+        const { data } = await axios.get(`races/${userId}`);
+//        console.log(data)
+        setRuns(data);
+      } catch (e) {
+        console.error(e.response?.data || e);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    if (userId) fetchRuns();
+  }, [setIsLoading, userId]);
 
-  const handleNewRun = () => {
-    navigation.navigate("RunProgress");
-  };
+  const historyByMonth = runs.reduce((acc, run) => {
+    const timeStr = run.startTime;
+    const dateObj = new Date(timeStr);
+
+    if (isNaN(dateObj)) {
+      console.warn("Data inválida para essa corrida:", run);
+      return acc;
+    }
+
+    const monthLabel = dateObj.toLocaleDateString("pt-BR", {
+      month: "long",
+      year: "numeric",
+    });
+
+    let section = acc.find((s) => s.month === monthLabel);
+    if (!section) {
+      section = { month: monthLabel, runs: [] };
+      acc.push(section);
+    }
+
+
+    const name = dateObj.toLocaleDateString("pt-BR", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    });
+
+    section.runs.push({
+      name,
+      distance: run.distance ?? 0,
+    });
+
+    return acc;
+  }, []);
+
+
+  const handleNewRun = () => navigation.navigate("RunProgress");
 
   return (
     <>
@@ -79,7 +119,7 @@ export default function RaceScreen() {
         paddingTop={25}
         isScroll={true}
       >
-        {mockHistory.map((g) => (
+        {historyByMonth.map((g) => (
           <MonthSection key={g.month} month={g.month} runs={g.runs} />
         ))}
       </WhiteIshBackground>
@@ -96,9 +136,7 @@ export default function RaceScreen() {
   );
 }
 
-// ────────────────────────────────────────────────────────────────────────────────
-// Estilos
-// ────────────────────────────────────────────────────────────────────────────────
+
 
 const { width } = Dimensions.get("window");
 
