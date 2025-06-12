@@ -9,12 +9,7 @@ import {
   nameAtom,
   tokenAtom,
 } from "../../jotai/asyncStore";
-import {
-  ArrowSVG,
-  DisconnectIconSVG,
-  GearSVG,
-  UserIconSVG,
-} from "../../constants/svgs";
+import { ArrowSVG, DisconnectIconSVG, UserIconSVG } from "../../constants/svgs";
 import { useMemo } from "react";
 
 export default function MoreScreen() {
