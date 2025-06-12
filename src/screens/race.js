@@ -77,6 +77,7 @@ export default function RaceScreen() {
         titleDistanceToTop={75}
         screenPercentage={75}
         paddingTop={25}
+        isScroll={true}
       >
         {mockHistory.map((g) => (
           <MonthSection key={g.month} month={g.month} runs={g.runs} />

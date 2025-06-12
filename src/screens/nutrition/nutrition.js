@@ -132,6 +132,7 @@ const styles = StyleSheet.create({
   fabButton: {
     width: 80,
     height: 80,
+    backgroundColor: colors.BACKGROUND_YELLOW,
   },
   fab: {
     bottom: 0,
