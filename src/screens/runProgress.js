@@ -26,28 +26,27 @@ export default function RunProgressScreen() {
 
   /** ─── Estados ───────────────────────────────────────────────────────────── */
   const [hasPermission, setHasPermission] = useState(false);
-  const [path, setPath] = useState([]);                // vetor de pontos
+  const [path, setPath] = useState([]); // vetor de pontos
   const [distanceMeters, setDistanceMeters] = useState(0);
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
   const [raceId, setRaceId] = useState(0);
 
   /** ─── Refs ───────────────────────────────────────────────────────────────── */
   const [userId] = useAtom(idAtom);
-  const mapRef     = useRef(null);
+  const mapRef = useRef(null);
   const watcherRef = useRef(null);
-  const timerRef   = useRef(null);
+  const timerRef = useRef(null);
   const startTimeRef = useRef(0);
 
   /** ─── Pedir permissão + iniciar corrida ─────────────────────────────────── */
   useEffect(() => {
-
     async function init() {
       /* 1. Permissão --------------------------------------------------------- */
       const { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== "granted") {
         Alert.alert(
           "Permissão necessária",
-          "Precisamos de acesso à sua localização para registrar a corrida."
+          "Precisamos de acesso à sua localização para registrar a corrida.",
         );
         return;
       }
@@ -59,9 +58,8 @@ export default function RunProgressScreen() {
           const res = await axios.post(`/races/${userId}`, {
             startTime: new Date().toISOString(),
           });
-//          console.log(userId, res.data.id)
-        setRaceId(res.data.id);
-        }catch (err) {
+          setRaceId(res.data.id);
+        } catch (err) {
           console.error("Erro criando corrida:", err);
         }
       }
@@ -69,11 +67,9 @@ export default function RunProgressScreen() {
       /* 3. Inicia cronômetro ------------------------------------------------- */
       startTimeRef.current = Date.now();
       timerRef.current = setInterval(() => {
-
         setElapsedSeconds(
-          Math.floor((Date.now() - startTimeRef.current) / 1000)
+          Math.floor((Date.now() - startTimeRef.current) / 1000),
         );
-
       }, 1000);
 
       /* 4. Inicia listener de localização ----------------------------------- */
@@ -82,7 +78,7 @@ export default function RunProgressScreen() {
           /** Precisão alta → GPS; evita “travamento” no primeiro ponto */
           accuracy: Location.Accuracy.Highest, // ou HighestForNavigation
           /** Só um critério: distância mínima entre leituras                   */
-          distanceInterval: 5,                 // ~5 m
+          distanceInterval: 0, // ~5 m
           // timeInterval: 0,                  // não misturar com distanceInterval
         },
         (loc) => {
@@ -98,33 +94,17 @@ export default function RunProgressScreen() {
             const last = prev[prev.length - 1];
             const delta = haversine(
               { lat: last.latitude, lon: last.longitude },
-              { lat: latitude,      lon: longitude }
+              { lat: latitude, lon: longitude },
             );
-
-            /* Ignora ruído <1 m e saltos >100 m ----------------------------- */
-            if (delta < 1 || delta > 100) return prev;
 
             setDistanceMeters((d) => d + delta);
             return [...prev, { latitude, longitude, timestamp: loc.timestamp }];
           });
-
-          /* Envia para API (assíncrono, sem bloquear) ----------------------- */
-          console.log(raceId, loc.timestamp)
-          if (raceId && Date.now() - loc.timestamp > 0) {
-            const payload = {
-              latitude:  latitude.toString(),
-              longitude: longitude.toString(),
-              timestamp: new Date(loc.timestamp).toISOString(),
-            };
-
-            axios.post(`/races/${userId}/${raceId}/points`, payload)
-                 .catch(console.error);
-          }
-        }
+        },
       );
     }
 
-    init();
+    if (userId) init();
 
     /* Cleanup --------------------------------------------------------------- */
     return () => {
@@ -137,7 +117,10 @@ export default function RunProgressScreen() {
   useEffect(() => {
     if (path.length && mapRef.current) {
       const { latitude, longitude } = path[path.length - 1];
-      mapRef.current.animateCamera({ center: { latitude, longitude } }, { duration: 500 });
+      mapRef.current.animateCamera(
+        { center: { latitude, longitude } },
+        { duration: 500 },
+      );
     }
   }, [path]);
 
@@ -147,6 +130,20 @@ export default function RunProgressScreen() {
     clearInterval(timerRef.current);
 
     try {
+      for (const point of path) {
+        const requestData = {
+          latitude: `${point.latitude}`,
+          longitude: `${point.longitude}`,
+          timestamp: new Date().toISOString(),
+        };
+        console.log(requestData);
+        try {
+          await axios.post(`/races/${userId}/${raceId}/points`, requestData);
+        } catch (error) {
+          console.log(error.response.data);
+        }
+      }
+
       if (raceId) {
         await axios.patch(`/races/${userId}/${raceId}`, {
           endTime: new Date().toISOString(),
@@ -154,8 +151,8 @@ export default function RunProgressScreen() {
         const resp = await axios.get(`/races/${userId}/${raceId}`);
         navigation.replace("RunFinished", {
           totalDistance: distanceMeters / 1000,
-          totalTime:     elapsedSeconds,
-          path:          resp.data.points,
+          totalTime: elapsedSeconds,
+          path: resp.data.points,
         });
         return;
       }
@@ -166,7 +163,7 @@ export default function RunProgressScreen() {
     // fallback local, caso API falhe
     navigation.replace("RunFinished", {
       totalDistance: distanceMeters / 1000,
-      totalTime:     elapsedSeconds,
+      totalTime: elapsedSeconds,
       path,
     });
   };
@@ -178,8 +175,9 @@ export default function RunProgressScreen() {
     return `${m}:${s}`;
   };
 
-  const distanceKm    = (distanceMeters / 1000).toFixed(2);
-  const paceSec       = distanceMeters > 0 ? elapsedSeconds / (distanceMeters / 1000) : 0;
+  const distanceKm = (distanceMeters / 1000).toFixed(2);
+  const paceSec =
+    distanceMeters > 0 ? elapsedSeconds / (distanceMeters / 1000) : 0;
   const formattedPace = paceSec
     ? `${String(Math.floor(paceSec / 60)).padStart(2, "0")}’${String(Math.floor(paceSec % 60)).padStart(2, "0")}”`
     : "--";
@@ -203,7 +201,7 @@ export default function RunProgressScreen() {
             ref={mapRef}
             style={styles.map}
             initialRegion={{
-              latitude:  path[0]?.latitude  ?? -23.55052,
+              latitude: path[0]?.latitude ?? -23.55052,
               longitude: path[0]?.longitude ?? -46.633308,
               latitudeDelta: 0.01,
               longitudeDelta: 0.01,
@@ -212,10 +210,16 @@ export default function RunProgressScreen() {
             followsUserLocation={false}
           >
             {path.map((p, i) => (
-              <Marker key={i} coordinate={{ latitude: p.latitude, longitude: p.longitude }} />
+              <Marker
+                key={i}
+                coordinate={{ latitude: p.latitude, longitude: p.longitude }}
+              />
             ))}
             <Polyline
-              coordinates={path.map((p) => ({ latitude: p.latitude, longitude: p.longitude }))}
+              coordinates={path.map((p) => ({
+                latitude: p.latitude,
+                longitude: p.longitude,
+              }))}
               strokeColor="#FF0000"
               strokeWidth={4}
             />
@@ -231,8 +235,8 @@ export default function RunProgressScreen() {
       <View style={styles.metricsRow}>
         {[
           { title: "Pace Médio", value: formattedPace },
-          { title: "Tempo",      value: formatTime(elapsedSeconds) },
-          { title: "Calorias",   value: String(caloriesBurned) },
+          { title: "Tempo", value: formatTime(elapsedSeconds) },
+          { title: "Calorias", value: String(caloriesBurned) },
         ].map((m) => (
           <View key={m.title} style={styles.metricBlock}>
             <Text style={styles.metricValue}>{m.value}</Text>
@@ -256,9 +260,9 @@ export default function RunProgressScreen() {
 
 /** ─── Estilos (inalterados, exceto possível ajuste de z‑index) ────────────── */
 const styles = StyleSheet.create({
-  container:        { flex: 1, backgroundColor: colors.WHITE },
-  gradientHeader:   { position: "absolute", width, height: HEADER_HEIGHT },
-  bottomCard:       {
+  container: { flex: 1, backgroundColor: colors.WHITE },
+  gradientHeader: { position: "absolute", width, height: HEADER_HEIGHT },
+  bottomCard: {
     position: "absolute",
     top: HEADER_HEIGHT - 1,
     width,
@@ -268,19 +272,23 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 60,
     overflow: "hidden",
   },
-  map:              { flex: 1 },
-  mapPlaceholder:   { flex: 1, justifyContent: "center", alignItems: "center" },
-  metricsRow:       {
+  map: { flex: 1 },
+  mapPlaceholder: { flex: 1, justifyContent: "center", alignItems: "center" },
+  metricsRow: {
     position: "absolute",
     top: 40,
     width,
     flexDirection: "row",
     justifyContent: "space-around",
   },
-  metricBlock:      { alignItems: "center" },
-  metricValue:      { fontFamily: "Poppins-SemiBold", fontSize: 36, color: "#000" },
-  metricTitle:      { fontFamily: "Poppins-Regular", fontSize: 18, color: "rgba(0,0,0,0.6)" },
-  distanceBlock:    {
+  metricBlock: { alignItems: "center" },
+  metricValue: { fontFamily: "Poppins-SemiBold", fontSize: 36, color: "#000" },
+  metricTitle: {
+    fontFamily: "Poppins-Regular",
+    fontSize: 18,
+    color: "rgba(0,0,0,0.6)",
+  },
+  distanceBlock: {
     position: "absolute",
     top: HEADER_HEIGHT - 80,
     alignSelf: "center",
@@ -288,9 +296,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     zIndex: 10,
   },
-  distance:         { fontFamily: "Poppins-BlackItalic", fontSize: 48, color: "#000" },
-  distanceLabel:    { fontFamily: "Poppins-BlackItalic", fontSize: 20, color: "rgba(0,0,0,0.6)" },
-  pauseBtn:         {
+  distance: { fontFamily: "Poppins-BlackItalic", fontSize: 48, color: "#000" },
+  distanceLabel: {
+    fontFamily: "Poppins-BlackItalic",
+    fontSize: 20,
+    color: "rgba(0,0,0,0.6)",
+  },
+  pauseBtn: {
     marginTop: 20,
     width: 70,
     height: 70,
@@ -299,6 +311,5 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  pauseTxt:         { color: colors.WHITE, fontSize: 22 },
+  pauseTxt: { color: colors.WHITE, fontSize: 22 },
 });
-
