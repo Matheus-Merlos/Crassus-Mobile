@@ -117,6 +117,7 @@ export default function RaceScreen() {
         titleDistanceToTop={75}
         screenPercentage={75}
         paddingTop={25}
+        isScroll={true}
       >
         {historyByMonth.map((g) => (
           <MonthSection key={g.month} month={g.month} runs={g.runs} />
